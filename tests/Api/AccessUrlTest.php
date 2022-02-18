@@ -21,6 +21,20 @@ class AccessUrlTest extends TestCase
         $this->assertDatabase($payload);
     }
 
+    public function testCreateAccessUrlInvalidData(): void
+    {
+        $this->authenticateAsAdmin();
+
+        $payload = [[
+            'url' => $this->faker->slug . $this->faker->numberBetween(),
+            'modelable_id' => $this->faker->numberBetween(),
+            'modelable_type' => $this->faker->word,
+        ]];
+
+        $this->response = $this->actingAs($this->user, 'api')->json('POST', '/api/admin/access-url', $payload);
+        $this->response->assertUnprocessable();
+    }
+
     public function testDuplicateAccessUrl(): void
     {
         $this->authenticateAsAdmin();
@@ -46,6 +60,17 @@ class AccessUrlTest extends TestCase
         $this->assertDatabase($payload);
     }
 
+    public function testUpdateAccessUrlInvalidData(): void
+    {
+        $this->authenticateAsAdmin();
+
+        $this->createAccessUrl();
+
+        $id = $this->response->getData()->data->id;
+        $this->response = $this->actingAs($this->user, 'api')->json('PATCH', '/api/admin/access-url/' . $id, []);
+        $this->response->assertUnprocessable();
+    }
+
     public function testDeleteAccessUrl(): void
     {
         $this->authenticateAsAdmin();
@@ -57,6 +82,13 @@ class AccessUrlTest extends TestCase
         $this->response->assertOk();
 
         $this->assertDatabaseMissing('access_urls', $payload);
+    }
+
+    public function testDeleteAccessUrlInvalidData(): void
+    {
+        $this->authenticateAsAdmin();
+        $this->response = $this->actingAs($this->user, 'api')->json('DELETE', '/api/admin/access-url/' . $this->faker->numberBetween());
+        $this->response->assertNotFound();
     }
 
     public function testIndexAccessUrl()

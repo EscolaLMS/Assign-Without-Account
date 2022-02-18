@@ -8,6 +8,8 @@ use EscolaLms\AssignWithoutAccount\EscolaLmsAssignWithoutAccountServiceProvider;
 use EscolaLms\Core\Models\User;
 use EscolaLms\Courses\EscolaLmsCourseServiceProvider;
 use EscolaLms\Scorm\EscolaLmsScormServiceProvider;
+use EscolaLms\Tags\EscolaLmsTagsServiceProvider;
+use EscolaLms\TopicTypes\EscolaLmsTopicTypesServiceProvider;
 use Laravel\Passport\PassportServiceProvider;
 use Spatie\Permission\PermissionServiceProvider;
 
@@ -23,6 +25,8 @@ class TestCase extends \EscolaLms\Core\Tests\TestCase
             PermissionServiceProvider::class,
             EscolaLmsAuthServiceProvider::class,
             EscolaLmsCourseServiceProvider::class,
+            EscolaLmsTagsServiceProvider::class,
+            EscolaLmsTopicTypesServiceProvider::class,
             EscolaLmsScormServiceProvider::class,
             EscolaLmsAssignWithoutAccountServiceProvider::class,
         ];

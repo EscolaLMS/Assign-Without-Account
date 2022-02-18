@@ -101,6 +101,51 @@ class CourseAssignTest extends TestCase
         $this->assertTrue($course2->users()->get()->contains('email', $email));
     }
 
+
+    public function testCourseAccessResource(): void
+    {
+        $this->authenticateAsAdmin();
+        $course = Course::factory()->create();
+        AccessUrl::factory()->create([
+            'modelable_id' => $course->getKey(),
+            'modelable_type' => Course::class,
+        ]);
+
+        $this->response = $this->actingAs($this->user, 'api')->json('GET', '/api/courses')->assertOk();
+        $this->response->assertJsonStructure([
+            'data' => [[
+                'access' => [
+                    'id',
+                    'url',
+                    'modelable_id',
+                    'modelable_type'
+                ]
+            ]]
+        ]);
+    }
+
+    public function testCourseAdminAccessResource(): void
+    {
+        $this->authenticateAsAdmin();
+        $course = Course::factory()->create();
+        AccessUrl::factory()->create([
+            'modelable_id' => $course->getKey(),
+            'modelable_type' => Course::class,
+        ]);
+
+        $this->response = $this->actingAs($this->user, 'api')->json('GET', '/api/admin/courses')->assertOk();
+        $this->response->assertJsonStructure([
+            'data' => [[
+                'access' => [
+                    'id',
+                    'url',
+                    'modelable_id',
+                    'modelable_type'
+                ]
+            ]]
+        ]);
+    }
+
     private function createSubmission(string $email, int $status, Course $course, AccessUrl $accessUrl = null): void
     {
         if (!$accessUrl) {
