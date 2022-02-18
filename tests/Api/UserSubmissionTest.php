@@ -4,7 +4,6 @@ namespace EscolaLms\AssignWithoutAccount\Tests\Api;
 
 use EscolaLms\AssignWithoutAccount\Enums\UserSubmissionEnum;
 use EscolaLms\AssignWithoutAccount\Models\AccessUrl;
-use EscolaLms\AssignWithoutAccount\Models\UserSubmission;
 use EscolaLms\AssignWithoutAccount\Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -16,46 +15,28 @@ class UserSubmissionTest extends TestCase
     public function testCreateUserSubmission(): void
     {
         $email = $this->faker->email;
+        $frontend_url = $this->faker->url;
+
         $accessUrl = AccessUrl::factory()->create();
 
         $this->response = $this->json('POST', '/api/user-submissions/' . $accessUrl->url, [
-            'email' => $email
+            'email' => $email,
+            'frontend_url' => $frontend_url
         ])->assertOk();
 
         $this->assertDatabaseHas('user_submissions', [
             'email' => $email,
             'access_url_id' => $accessUrl->getKey(),
-            'status' => UserSubmissionEnum::EXPECTED
+            'status' => UserSubmissionEnum::EXPECTED,
+            'frontend_url' => $frontend_url
         ]);
     }
 
     public function testCreateUserSubmissionInvalidUrl(): void
     {
         $this->response = $this->json('POST', '/api/user-submissions/' . $this->faker->slug, [
-            'email' => $this->faker->email
+            'email' => $this->faker->email,
+            'frontend_url' => $this->faker->url
         ])->assertNotFound();
-    }
-
-    public function testIndexUserSubmission(): void
-    {
-        $this->authenticateAsAdmin();
-        UserSubmission::factory()->count(5)->create();
-
-        $this->response = $this->actingAs($this->user, 'api')
-            ->json('GET', '/api/admin/user-submissions')
-            ->assertOk();
-
-        $this->response->assertJsonStructure([
-            'data' => [[
-                'id',
-                'email',
-                'status',
-                'url',
-                'modelable_id',
-                'modelable_type',
-                'created_at',
-            ]]
-        ]);
-        $this->response->assertJsonCount(5, 'data');
     }
 }

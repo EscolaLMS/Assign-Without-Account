@@ -10,6 +10,4 @@ use Illuminate\Http\JsonResponse;
 interface UserSubmissionControllerSwagger
 {
     public function create(AccessUrl $accessUrl, UserSubmissionRequest $request): JsonResponse;
-
-    public function index(UserSubmissionListRequest $request): JsonResponse;
 }

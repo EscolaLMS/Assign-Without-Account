@@ -6,7 +6,7 @@ use EscolaLms\AssignWithoutAccount\Models\AccessUrl;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class AccessUrlCreateRequest extends FormRequest
+class AccessUrlCreateRequest extends AccessUrlRequest
 {
     /**
      * @return bool
@@ -41,10 +41,6 @@ class AccessUrlCreateRequest extends FormRequest
             'modelable_type' => [
                 'required',
                 'string',
-                Rule::unique(AccessUrl::class)->where(function ($query) {
-                    $query->where('modelable_id', $this->modelable_id)
-                        ->where('modelable_type', $this->modelable_type);
-                }),
             ],
         ];
     }

@@ -23,6 +23,7 @@ class UserSubmissionRequest extends FormRequest
     {
         return [
             'email' => ['required', 'email:rfc,dns', 'string'],
+            'frontend_url' => ['required', 'string'],
         ];
     }
 }

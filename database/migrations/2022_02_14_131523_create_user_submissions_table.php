@@ -17,6 +17,7 @@ class CreateUserSubmissionsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('access_url_id');
             $table->string('email', 255);
+            $table->string('frontend_url');
             $table->integer('status');
             $table->timestamps();
 
