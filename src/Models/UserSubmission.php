@@ -14,12 +14,14 @@ class UserSubmission extends Model
     protected $fillable = [
         'access_url_id',
         'email',
+        'frontend_url',
         'status',
     ];
 
     protected $casts = [
         'access_url_id' => 'integer',
         'email' => 'string',
+        'frontend_url' => 'string',
         'status' => 'integer',
     ];
 

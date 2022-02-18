@@ -3,19 +3,14 @@
 namespace EscolaLms\AssignWithoutAccount\Http\Requests;
 
 use EscolaLms\AssignWithoutAccount\Models\AccessUrl;
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class AccessUrlUpdateRequest extends FormRequest
+class AccessUrlUpdateRequest extends AccessUrlRequest
 {
-    protected function prepareForValidation(): void
-    {
-        parent::prepareForValidation();
-        $this->merge(['id' => $this->route('id')]);
-    }
-
     public function authorize(): bool
     {
+        $accessUrl = $this->getAccessUrl();
+
         // TODO add permissions
         return true;
     }
@@ -23,7 +18,6 @@ class AccessUrlUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id' => ['required', 'integer', Rule::exists(AccessUrl::class, 'id')],
             'url' => ['required', 'string', Rule::unique(AccessUrl::class, 'url')],
         ];
     }

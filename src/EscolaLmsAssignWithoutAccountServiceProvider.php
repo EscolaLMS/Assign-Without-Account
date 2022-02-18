@@ -2,6 +2,8 @@
 
 namespace EscolaLms\AssignWithoutAccount;
 
+use EscolaLms\AssignWithoutAccount\Providers\EventServiceProvider;
+use EscolaLms\AssignWithoutAccount\Providers\ExtendedResourcesServiceProvider;
 use EscolaLms\AssignWithoutAccount\Repositories\AccessUrlRepository;
 use EscolaLms\AssignWithoutAccount\Repositories\Contracts\AccessUrlRepositoryContract;
 use EscolaLms\AssignWithoutAccount\Repositories\Contracts\UserSubmissionRepositoryContract;
@@ -23,6 +25,9 @@ class EscolaLmsAssignWithoutAccountServiceProvider extends ServiceProvider
     public function register()
     {
         $this->mergeConfigFrom(__DIR__ . '/config.php', self::CONFIG_KEY);
+
+        $this->app->register(EventServiceProvider::class);
+        $this->app->register(ExtendedResourcesServiceProvider::class);
     }
 
     public function boot()

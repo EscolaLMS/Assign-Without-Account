@@ -16,6 +16,7 @@ class UserSubmissionFactory extends Factory
         return [
             'access_url_id' => AccessUrl::factory(),
             'email' => $this->faker->email,
+            'frontend_url' => $this->faker->url,
             'status' => $this->faker->randomElement(UserSubmissionEnum::getValues())
         ];
     }

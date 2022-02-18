@@ -11,6 +11,7 @@ class UserSubmissionResource extends JsonResource
         return [
             'id' => $this->id,
             'email' => $this->email,
+            'frontend_url' => $this->frontend_url,
             'status' => $this->status,
             'url' => $this->accessUrl->url,
             'modelable_id' => $this->accessUrl->modelable_id,

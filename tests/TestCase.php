@@ -2,8 +2,14 @@
 
 namespace EscolaLms\AssignWithoutAccount\Tests;
 
+use EscolaLms\Auth\EscolaLmsAuthServiceProvider;
 use EscolaLms\Core\Enums\UserRole;
 use EscolaLms\AssignWithoutAccount\EscolaLmsAssignWithoutAccountServiceProvider;
+use EscolaLms\Core\Models\User;
+use EscolaLms\Courses\EscolaLmsCourseServiceProvider;
+use EscolaLms\Scorm\EscolaLmsScormServiceProvider;
+use EscolaLms\Tags\EscolaLmsTagsServiceProvider;
+use EscolaLms\TopicTypes\EscolaLmsTopicTypesServiceProvider;
 use Laravel\Passport\PassportServiceProvider;
 use Spatie\Permission\PermissionServiceProvider;
 
@@ -17,8 +23,19 @@ class TestCase extends \EscolaLms\Core\Tests\TestCase
             ...parent::getPackageProviders($app),
             PassportServiceProvider::class,
             PermissionServiceProvider::class,
+            EscolaLmsAuthServiceProvider::class,
+            EscolaLmsCourseServiceProvider::class,
+            EscolaLmsTagsServiceProvider::class,
+            EscolaLmsTopicTypesServiceProvider::class,
+            EscolaLmsScormServiceProvider::class,
             EscolaLmsAssignWithoutAccountServiceProvider::class,
         ];
+    }
+
+    protected function getEnvironmentSetUp($app)
+    {
+        $app['config']->set('auth.providers.users.model', User::class);
+        $app['config']->set('passport.client_uuids', true);
     }
 
     protected function authenticateAsAdmin(): void
