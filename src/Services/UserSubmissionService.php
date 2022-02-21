@@ -40,7 +40,7 @@ class UserSubmissionService implements UserSubmissionServiceContract
         $user = new User();
         $user->email = $userSubmission->email;
 
-        UserSubmissionAccepted::dispatch($user, 'str');
+        UserSubmissionAccepted::dispatch($user, $userSubmission->frontend_url);
 
         return $userSubmission;
     }
