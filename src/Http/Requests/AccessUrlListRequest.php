@@ -2,6 +2,9 @@
 
 namespace EscolaLms\AssignWithoutAccount\Http\Requests;
 
+use EscolaLms\AssignWithoutAccount\Models\AccessUrl;
+use Illuminate\Support\Facades\Gate;
+
 class AccessUrlListRequest extends AccessUrlRequest
 {
     /**
@@ -9,8 +12,7 @@ class AccessUrlListRequest extends AccessUrlRequest
      */
     public function authorize(): bool
     {
-        // TODO add permissions
-        return true;
+        return Gate::allows('list', AccessUrl::class);
     }
 
     /**

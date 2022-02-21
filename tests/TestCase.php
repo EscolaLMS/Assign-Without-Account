@@ -28,7 +28,7 @@ class TestCase extends \EscolaLms\Core\Tests\TestCase
             EscolaLmsTagsServiceProvider::class,
             EscolaLmsTopicTypesServiceProvider::class,
             EscolaLmsScormServiceProvider::class,
-            EscolaLmsAssignWithoutAccountServiceProvider::class,
+            EscolaLmsAssignWithoutAccountServiceProvider::class
         ];
     }
 
@@ -43,5 +43,11 @@ class TestCase extends \EscolaLms\Core\Tests\TestCase
         $this->user = config('auth.providers.users.model')::factory()->create();
         $this->user->guard_name = 'api';
         $this->user->assignRole(UserRole::ADMIN);
+    }
+
+    protected function authenticatedUser(): void
+    {
+        $this->user = config('auth.providers.users.model')::factory()->create();
+        $this->user->guard_name = 'api';
     }
 }

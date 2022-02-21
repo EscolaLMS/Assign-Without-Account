@@ -4,7 +4,7 @@ namespace EscolaLms\AssignWithoutAccount\Http\Controllers;
 
 use EscolaLms\AssignWithoutAccount\Http\Controllers\Swagger\UserSubmissionControllerSwagger;
 use EscolaLms\AssignWithoutAccount\Http\Requests\UserSubmissionListRequest;
-use EscolaLms\AssignWithoutAccount\Http\Requests\UserSubmissionRequest;
+use EscolaLms\AssignWithoutAccount\Http\Requests\UserSubmissionCreateRequest;
 use EscolaLms\AssignWithoutAccount\Http\Requests\UserSubmissionUpdateRequest;
 use EscolaLms\AssignWithoutAccount\Http\Resources\UserSubmissionResource;
 use EscolaLms\AssignWithoutAccount\Models\AccessUrl;
@@ -24,7 +24,7 @@ class UserSubmissionController extends EscolaLmsBaseController implements UserSu
         $this->userSubmissionService = $userSubmissionService;
     }
 
-    public function create(AccessUrl $accessUrl, UserSubmissionRequest $request): JsonResponse
+    public function create(AccessUrl $accessUrl, UserSubmissionCreateRequest $request): JsonResponse
     {
         $this->userSubmissionService->create($accessUrl, $request->only(['email', 'frontend_url']));
         return $this->sendSuccess(__('User submissions successfully sent'));

@@ -2,18 +2,16 @@
 
 namespace EscolaLms\AssignWithoutAccount\Http\Requests;
 
-use EscolaLms\AssignWithoutAccount\Models\UserSubmission;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Gate;
 
-class UserSubmissionListRequest extends FormRequest
+class UserSubmissionCreateRequest extends FormRequest
 {
     /**
      * @return bool
      */
     public function authorize(): bool
     {
-        return Gate::allows('list', UserSubmission::class);
+        return true;
     }
 
     /**
@@ -23,6 +21,9 @@ class UserSubmissionListRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [];
+        return [
+            'email' => ['required', 'email:rfc,dns', 'string'],
+            'frontend_url' => ['required', 'string'],
+        ];
     }
 }

@@ -2,6 +2,7 @@
 
 namespace EscolaLms\AssignWithoutAccount\Tests\Api;
 
+use EscolaLms\AssignWithoutAccount\Database\Seeders\AssignWithoutAccountPermissionSeeder;
 use EscolaLms\AssignWithoutAccount\Enums\UserSubmissionEnum;
 use EscolaLms\AssignWithoutAccount\Events\UserSubmissionAccepted;
 use EscolaLms\AssignWithoutAccount\Models\AccessUrl;
@@ -19,12 +20,16 @@ class CourseAssignTest extends TestCase
 {
     use DatabaseTransactions, WithFaker;
 
-    private Course $course;
-
     protected function getEnvironmentSetUp($app)
     {
         $app['config']->set('auth.providers.users.model', User::class);
         $app['config']->set('passport.client_uuids', true);
+    }
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->seed(AssignWithoutAccountPermissionSeeder::class);
     }
 
     public function testCreateSubmissionAndRegisterAccount()

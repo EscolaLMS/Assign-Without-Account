@@ -23,7 +23,6 @@ class UserSubmissionService implements UserSubmissionServiceContract
 
     public function create(AccessUrl $accessUrl, array $data): UserSubmission
     {
-        // TODO check user with email exists
         $submission = [
             'access_url_id' => $accessUrl->getKey(),
             'email' => $data['email'],

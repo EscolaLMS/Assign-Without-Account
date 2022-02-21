@@ -39,14 +39,24 @@ class AccountRegisteredListener
             }
 
             $strategy = $this->getStrategy($accessUrl->modelable_type);
+
+            if (!$strategy) {
+                continue;
+            }
+
             $strategy->assign($user, $accessUrl->modelable_id);
         }
     }
 
-    private function getStrategy(string $modelType): AssignStrategy
+    private function getStrategy(string $modelType): ?AssignStrategy
     {
         $class = class_basename($modelType);
         $strategy = 'EscolaLms\\AssignWithoutAccount\\Strategies\\' . $class . 'AssignStrategy';
+
+        if (!class_exists($strategy)) {
+            return null;
+        }
+
         return new $strategy();
     }
 }

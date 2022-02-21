@@ -2,6 +2,7 @@
 
 namespace EscolaLms\AssignWithoutAccount\Tests\Api;
 
+use EscolaLms\AssignWithoutAccount\Database\Seeders\AssignWithoutAccountPermissionSeeder;
 use EscolaLms\AssignWithoutAccount\Enums\UserSubmissionEnum;
 use EscolaLms\AssignWithoutAccount\Events\UserSubmissionAccepted;
 use EscolaLms\AssignWithoutAccount\Models\AccessUrl;
@@ -14,6 +15,12 @@ use Illuminate\Support\Facades\Event;
 class UserSubmissionAdminTest extends TestCase
 {
     use DatabaseTransactions, WithFaker;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->seed(AssignWithoutAccountPermissionSeeder::class);
+    }
 
     public function testIndexUserSubmission(): void
     {
@@ -39,6 +46,14 @@ class UserSubmissionAdminTest extends TestCase
         $this->response->assertJsonCount(5, 'data');
     }
 
+    public function testIndexUserSubmissionCannotShow()
+    {
+        $this->authenticatedUser();
+        $this->response = $this->actingAs($this->user, 'api')
+            ->json('GET', '/api/admin/user-submissions')
+            ->assertForbidden();
+    }
+
     public function testAcceptUserSubmission()
     {
         Event::fake([UserSubmissionAccepted::class]);
@@ -57,6 +72,18 @@ class UserSubmissionAdminTest extends TestCase
             'id' => $userSubmission->getKey(),
             'status' => UserSubmissionEnum::ACCEPTED,
         ]);
+    }
+
+    public function testAcceptUserSubmissionCannotShow()
+    {
+        $userSubmission = UserSubmission::factory()->create([
+            'status' => UserSubmissionEnum::EXPECTED
+        ]);
+
+        $this->authenticatedUser();
+        $this->response = $this->actingAs($this->user, 'api')
+            ->json('GET', '/api/admin/user-submissions/accept/' . $userSubmission->getKey())
+            ->assertForbidden();
     }
 
     public function testRejectUserSubmission()
@@ -78,5 +105,17 @@ class UserSubmissionAdminTest extends TestCase
             'id' => $userSubmission->getKey(),
             'status' => UserSubmissionEnum::REJECTED,
         ]);
+    }
+
+    public function testRejectUserSubmissionCannotShow()
+    {
+        $userSubmission = UserSubmission::factory()->create([
+            'status' => UserSubmissionEnum::EXPECTED
+        ]);
+
+        $this->authenticatedUser();
+        $this->response = $this->actingAs($this->user, 'api')
+            ->json('GET', '/api/admin/user-submissions/reject/' . $userSubmission->getKey())
+            ->assertForbidden();
     }
 }

@@ -2,28 +2,15 @@
 
 namespace EscolaLms\AssignWithoutAccount\Http\Requests;
 
+use EscolaLms\AssignWithoutAccount\Models\UserSubmission;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Validation\Rule;
 
-class UserSubmissionRequest extends FormRequest
+abstract class UserSubmissionRequest extends FormRequest
 {
-    /**
-     * @return bool
-     */
-    public function authorize(): bool
+    public function getUserSubmission(): UserSubmission
     {
-        return true;
-    }
-
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
-    public function rules(): array
-    {
-        return [
-            'email' => ['required', 'email:rfc,dns', 'string'],
-            'frontend_url' => ['required', 'string'],
-        ];
+        return UserSubmission::findOrFail($this->route('id'));
     }
 }
