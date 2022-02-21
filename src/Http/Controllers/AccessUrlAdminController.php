@@ -12,9 +12,6 @@ use EscolaLms\AssignWithoutAccount\Http\Resources\AccessUrlResource;
 use EscolaLms\AssignWithoutAccount\Repositories\Contracts\AccessUrlRepositoryContract;
 use Illuminate\Http\JsonResponse;
 
-/**
- * TODO add swagger
- */
 class AccessUrlAdminController extends EscolaLmsBaseController implements AccessUrlControllerSwagger
 {
     private AccessUrlRepositoryContract $accessUrlRepository;

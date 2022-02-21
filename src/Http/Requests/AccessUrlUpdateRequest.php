@@ -3,6 +3,7 @@
 namespace EscolaLms\AssignWithoutAccount\Http\Requests;
 
 use EscolaLms\AssignWithoutAccount\Models\AccessUrl;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
 
 class AccessUrlUpdateRequest extends AccessUrlRequest
@@ -10,9 +11,7 @@ class AccessUrlUpdateRequest extends AccessUrlRequest
     public function authorize(): bool
     {
         $accessUrl = $this->getAccessUrl();
-
-        // TODO add permissions
-        return true;
+        return Gate::allows('update', $accessUrl);
     }
 
     public function rules(): array

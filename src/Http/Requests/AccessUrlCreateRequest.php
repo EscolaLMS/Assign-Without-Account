@@ -4,6 +4,7 @@ namespace EscolaLms\AssignWithoutAccount\Http\Requests;
 
 use EscolaLms\AssignWithoutAccount\Models\AccessUrl;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
 
 class AccessUrlCreateRequest extends AccessUrlRequest
@@ -13,8 +14,7 @@ class AccessUrlCreateRequest extends AccessUrlRequest
      */
     public function authorize(): bool
     {
-        // TODO add permissions
-        return true;
+        return Gate::allows('create', AccessUrl::class);
     }
 
     /**

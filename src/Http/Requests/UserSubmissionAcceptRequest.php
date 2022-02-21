@@ -2,11 +2,9 @@
 
 namespace EscolaLms\AssignWithoutAccount\Http\Requests;
 
-use EscolaLms\AssignWithoutAccount\Models\UserSubmission;
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Gate;
 
-class UserSubmissionUpdateRequest extends FormRequest
+class UserSubmissionAcceptRequest extends UserSubmissionRequest
 {
     /**
      * @return bool
@@ -14,9 +12,7 @@ class UserSubmissionUpdateRequest extends FormRequest
     public function authorize(): bool
     {
         $userSubmission = $this->getUserSubmission();
-
-        // TODO add permissions
-        return true;
+        return Gate::allows('accept', $userSubmission);
     }
 
     /**
@@ -27,10 +23,5 @@ class UserSubmissionUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [];
-    }
-
-    public function getUserSubmission(): UserSubmission
-    {
-        return UserSubmission::findOrFail($this->route('id'));
     }
 }

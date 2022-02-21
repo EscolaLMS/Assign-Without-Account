@@ -12,6 +12,9 @@ use EscolaLms\AssignWithoutAccount\Services\Contracts\UserSubmissionServiceContr
 use EscolaLms\AssignWithoutAccount\Services\UserSubmissionService;
 use Illuminate\Support\ServiceProvider;
 
+/**
+ * SWAGGER_VERSION
+ */
 class EscolaLmsAssignWithoutAccountServiceProvider extends ServiceProvider
 {
     const CONFIG_KEY = 'escolalms_assign_without_account';
@@ -26,6 +29,7 @@ class EscolaLmsAssignWithoutAccountServiceProvider extends ServiceProvider
     {
         $this->mergeConfigFrom(__DIR__ . '/config.php', self::CONFIG_KEY);
 
+        $this->app->register(AuthServiceProvider::class);
         $this->app->register(EventServiceProvider::class);
         $this->app->register(ExtendedResourcesServiceProvider::class);
     }

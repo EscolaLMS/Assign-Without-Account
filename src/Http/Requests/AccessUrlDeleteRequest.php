@@ -2,14 +2,14 @@
 
 namespace EscolaLms\AssignWithoutAccount\Http\Requests;
 
+use Illuminate\Support\Facades\Gate;
+
 class AccessUrlDeleteRequest extends AccessUrlRequest
 {
     public function authorize(): bool
     {
         $accessUrl = $this->getAccessUrl();
-
-        // TODO add permissions
-        return true;
+        return Gate::allows('delete', $accessUrl);
     }
 
     public function rules(): array

@@ -2,7 +2,7 @@
 
 namespace EscolaLms\AssignWithoutAccount\Tests\Api;
 
-use EscolaLms\Courses\Models\Course;
+use EscolaLms\AssignWithoutAccount\Database\Seeders\AssignWithoutAccountPermissionSeeder;
 use EscolaLms\AssignWithoutAccount\Models\AccessUrl;
 use EscolaLms\AssignWithoutAccount\Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -12,6 +12,12 @@ class AccessUrlTest extends TestCase
 {
     use DatabaseTransactions, WithFaker;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->seed(AssignWithoutAccountPermissionSeeder::class);
+    }
+
     public function testCreateAccessUrl(): void
     {
         $this->authenticateAsAdmin();
@@ -19,6 +25,15 @@ class AccessUrlTest extends TestCase
         $payload = $this->createAccessUrl();
 
         $this->assertDatabase($payload);
+    }
+
+    public function testGuestCannotCreateAccessUrl()
+    {
+        $this->authenticatedUser();
+        $this->response = $this
+            ->actingAs($this->user, 'api')
+            ->json('POST', '/api/admin/access-url', [])
+            ->assertForbidden();
     }
 
     public function testCreateAccessUrlInvalidData(): void
@@ -58,6 +73,18 @@ class AccessUrlTest extends TestCase
 
         $this->response->assertJsonFragment($payload);
         $this->assertDatabase($payload);
+    }
+
+    public function testGuestCannotUpdateAccessUrl()
+    {
+        $this->authenticateAsAdmin();
+        $this->createAccessUrl();
+        $id = $this->response->getData()->data->id;
+
+        $this->authenticatedUser();
+        $this->response = $this
+            ->actingAs($this->user, 'api')->json('PATCH', '/api/admin/access-url/' . $id, [])
+            ->assertForbidden();
     }
 
     public function testUpdateAccessUrlInvalidData(): void
@@ -108,6 +135,14 @@ class AccessUrlTest extends TestCase
             ]]
         ]);
         $this->response->assertJsonCount(5, 'data');
+    }
+
+    public function testCannonGuestIndexAccessUrl()
+    {
+        $this->authenticatedUser();
+        $this->response = $this->actingAs($this->user, 'api')
+            ->json('GET', '/api/admin/access-url')
+            ->assertForbidden();
     }
 
     public function testFilterAccessUrl()
