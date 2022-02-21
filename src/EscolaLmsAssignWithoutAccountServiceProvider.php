@@ -12,6 +12,9 @@ use EscolaLms\AssignWithoutAccount\Services\Contracts\UserSubmissionServiceContr
 use EscolaLms\AssignWithoutAccount\Services\UserSubmissionService;
 use Illuminate\Support\ServiceProvider;
 
+/**
+ * SWAGGER_VERSION
+ */
 class EscolaLmsAssignWithoutAccountServiceProvider extends ServiceProvider
 {
     const CONFIG_KEY = 'escolalms_assign_without_account';

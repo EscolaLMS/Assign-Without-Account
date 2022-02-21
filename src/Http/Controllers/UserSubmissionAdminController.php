@@ -3,21 +3,14 @@
 namespace EscolaLms\AssignWithoutAccount\Http\Controllers;
 
 use EscolaLms\AssignWithoutAccount\Http\Controllers\Swagger\UserSubmissionAdminControllerSwagger;
-use EscolaLms\AssignWithoutAccount\Http\Controllers\Swagger\UserSubmissionControllerSwagger;
 use EscolaLms\AssignWithoutAccount\Http\Requests\UserSubmissionAcceptRequest;
 use EscolaLms\AssignWithoutAccount\Http\Requests\UserSubmissionListRequest;
-use EscolaLms\AssignWithoutAccount\Http\Requests\UserSubmissionCreateRequest;
 use EscolaLms\AssignWithoutAccount\Http\Requests\UserSubmissionRejectRequest;
-use EscolaLms\AssignWithoutAccount\Http\Requests\UserSubmissionUpdateRequest;
 use EscolaLms\AssignWithoutAccount\Http\Resources\UserSubmissionResource;
-use EscolaLms\AssignWithoutAccount\Models\AccessUrl;
 use EscolaLms\AssignWithoutAccount\Services\Contracts\UserSubmissionServiceContract;
 use EscolaLms\Core\Http\Controllers\EscolaLmsBaseController;
 use Illuminate\Http\JsonResponse;
 
-/**
- * TODO add swagger
- */
 class UserSubmissionAdminController extends EscolaLmsBaseController implements UserSubmissionAdminControllerSwagger
 {
     private UserSubmissionServiceContract $userSubmissionService;

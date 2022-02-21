@@ -8,6 +8,31 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
+/**
+ * @OA\Schema(
+ *      schema="AccessUrl",
+ *      @OA\Property(
+ *          property="id",
+ *          description="access url id",
+ *          type="integer",
+ *      ),
+ *      @OA\Property(
+ *          property="url",
+ *          description="access url",
+ *          type="string"
+ *      ),
+ *      @OA\Property(
+ *          property="modelable_id",
+ *          description="model id",
+ *          type="integer"
+ *      ),
+ *      @OA\Property(
+ *          property="modelable_type",
+ *          description="model type",
+ *          type="string"
+ *      ),
+ * )
+ */
 class AccessUrl extends Model
 {
     use HasFactory;
