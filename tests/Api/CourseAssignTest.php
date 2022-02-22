@@ -8,11 +8,13 @@ use EscolaLms\AssignWithoutAccount\Events\UserSubmissionAccepted;
 use EscolaLms\AssignWithoutAccount\Models\AccessUrl;
 use EscolaLms\AssignWithoutAccount\Models\UserSubmission;
 use EscolaLms\AssignWithoutAccount\Tests\TestCase;
+use EscolaLms\Auth\Enums\SettingStatusEnum;
 use EscolaLms\Auth\Models\User;
 use EscolaLms\Courses\Models\Course;
 use Illuminate\Auth\RequestGuard;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Notification;
 
@@ -30,6 +32,9 @@ class CourseAssignTest extends TestCase
     {
         parent::setUp();
         $this->seed(AssignWithoutAccountPermissionSeeder::class);
+        Config::set('escola_auth.registration', SettingStatusEnum::ENABLED);
+        Config::set('escola_auth.account_must_be_enabled_by_admin', SettingStatusEnum::DISABLED);
+        Config::set('escola_auth.additional_fields_required', []);
     }
 
     public function testCreateSubmissionAndRegisterAccount()
