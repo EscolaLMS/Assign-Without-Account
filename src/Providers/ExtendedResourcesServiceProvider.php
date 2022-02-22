@@ -4,7 +4,6 @@ namespace EscolaLms\AssignWithoutAccount\Providers;
 
 use EscolaLms\AssignWithoutAccount\Http\Resources\AccessUrlResource;
 use EscolaLms\AssignWithoutAccount\Models\AccessUrl;
-use EscolaLms\UserAccess\Repositories\Contracts\AccessUrlRepositoryContract;
 use Illuminate\Support\ServiceProvider;
 
 class ExtendedResourcesServiceProvider extends ServiceProvider
@@ -26,7 +25,7 @@ class ExtendedResourcesServiceProvider extends ServiceProvider
                 ->first();
 
             return [
-                'access' => AccessUrlResource::make($resource)
+                'access' => empty($resource) ? [] : AccessUrlResource::make($resource)
             ];
         };
 

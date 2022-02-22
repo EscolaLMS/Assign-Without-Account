@@ -5,7 +5,6 @@ namespace EscolaLms\AssignWithoutAccount;
 use EscolaLms\AssignWithoutAccount\Models\UserSubmission;
 use EscolaLms\AssignWithoutAccount\Policies\AccessUrlPolicy;
 use EscolaLms\AssignWithoutAccount\Policies\UserSubmissionPolicy;
-use EscolaLms\UserAccess\Models\AccessUrl;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Laravel\Passport\Passport;
 
