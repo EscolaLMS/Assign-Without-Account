@@ -111,7 +111,6 @@ class CourseAssignTest extends TestCase
         $this->assertTrue($course2->users()->get()->contains('email', $email));
     }
 
-
     public function testCourseAccessResource(): void
     {
         $this->authenticateAsAdmin();
@@ -121,16 +120,17 @@ class CourseAssignTest extends TestCase
             'modelable_type' => Course::class,
         ]);
 
-        $this->response = $this->actingAs($this->user, 'api')->json('GET', '/api/courses')->assertOk();
+        $this->response = $this->actingAs($this->user, 'api')->json('GET', '/api/courses/' . $course->getKey())
+            ->assertOk();
         $this->response->assertJsonStructure([
-            'data' => [[
+            'data' => [
                 'access' => [
                     'id',
                     'url',
                     'modelable_id',
                     'modelable_type'
                 ]
-            ]]
+            ]
         ]);
     }
 
@@ -143,16 +143,19 @@ class CourseAssignTest extends TestCase
             'modelable_type' => Course::class,
         ]);
 
-        $this->response = $this->actingAs($this->user, 'api')->json('GET', '/api/admin/courses')->assertOk();
+        $this->response = $this->actingAs($this->user, 'api')
+            ->json('GET', '/api/admin/courses/' . $course->getKey())
+            ->assertOk();
+
         $this->response->assertJsonStructure([
-            'data' => [[
+            'data' => [
                 'access' => [
                     'id',
                     'url',
                     'modelable_id',
                     'modelable_type'
                 ]
-            ]]
+            ]
         ]);
     }
 
