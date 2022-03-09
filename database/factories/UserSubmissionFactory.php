@@ -2,10 +2,10 @@
 
 namespace EscolaLms\AssignWithoutAccount\Database\Factories;
 
-use EscolaLms\AssignWithoutAccount\Enums\UserSubmissionEnum;
-use EscolaLms\AssignWithoutAccount\Models\AccessUrl;
+use EscolaLms\AssignWithoutAccount\Enums\UserSubmissionStatusEnum;
 use EscolaLms\AssignWithoutAccount\Models\UserSubmission;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 class UserSubmissionFactory extends Factory
 {
@@ -13,11 +13,13 @@ class UserSubmissionFactory extends Factory
 
     public function definition()
     {
+        $type = Str::ucfirst($this->faker->word) . $this->faker->numberBetween();
+
         return [
-            'access_url_id' => AccessUrl::factory(),
             'email' => $this->faker->email,
-            'frontend_url' => $this->faker->url,
-            'status' => $this->faker->randomElement(UserSubmissionEnum::getValues())
+            'morphable_type' => 'EscolaLms\\' . $type . '\\Models\\' . $type,
+            'morphable_id' => $this->faker->numberBetween(1),
+            'status' => $this->faker->randomElement(UserSubmissionStatusEnum::getValues()),
         ];
     }
 }

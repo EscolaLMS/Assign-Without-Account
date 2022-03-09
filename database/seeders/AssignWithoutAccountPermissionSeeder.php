@@ -15,18 +15,15 @@ class AssignWithoutAccountPermissionSeeder extends Seeder
     {
         $admin = Role::findOrCreate('admin', 'api');
 
+        // TODO delete old permissions
+
         foreach (AssignWithoutAccountPermissionEnum::asArray() as $const => $value) {
             Permission::findOrCreate($value, 'api');
         }
 
         $admin->givePermissionTo([
-            AssignWithoutAccountPermissionEnum::ACCESS_URL_CREATE,
-            AssignWithoutAccountPermissionEnum::ACCESS_URL_DELETE,
-            AssignWithoutAccountPermissionEnum::ACCESS_URL_UPDATE,
-            AssignWithoutAccountPermissionEnum::ACCESS_URL_LIST,
             AssignWithoutAccountPermissionEnum::USER_SUBMISSION_LIST,
-            AssignWithoutAccountPermissionEnum::USER_SUBMISSION_ACCEPT,
-            AssignWithoutAccountPermissionEnum::USER_SUBMISSION_REJECT,
+            AssignWithoutAccountPermissionEnum::USER_SUBMISSION_CREATE,
         ]);
     }
 }

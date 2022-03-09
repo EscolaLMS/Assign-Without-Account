@@ -16,13 +16,8 @@ class UserSubmissionPolicy
         return $user->can(AssignWithoutAccountPermissionEnum::USER_SUBMISSION_LIST);
     }
 
-    public function accept(User $user, UserSubmission $userSubmission): bool
+    public function create(User $user): bool
     {
-        return $user->can(AssignWithoutAccountPermissionEnum::USER_SUBMISSION_ACCEPT);
-    }
-
-    public function reject(User $user, UserSubmission $userSubmission): bool
-    {
-        return $user->can(AssignWithoutAccountPermissionEnum::USER_SUBMISSION_REJECT);
+        return $user->can(AssignWithoutAccountPermissionEnum::USER_SUBMISSION_CREATE);
     }
 }

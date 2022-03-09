@@ -2,17 +2,15 @@
 
 namespace EscolaLms\AssignWithoutAccount\Services\Contracts;
 
-use EscolaLms\AssignWithoutAccount\Models\AccessUrl;
+use EscolaLms\AssignWithoutAccount\Dto\UserSubmissionDto;
+use EscolaLms\AssignWithoutAccount\Dto\UserSubmissionSearchDto;
 use EscolaLms\AssignWithoutAccount\Models\UserSubmission;
+use EscolaLms\Core\Dtos\PaginationDto;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 interface UserSubmissionServiceContract
 {
-    public function create(AccessUrl $accessUrl, array $data): UserSubmission;
+    public function create(UserSubmissionDto $dto): UserSubmission;
 
-    public function accept(int $id): UserSubmission;
-
-    public function reject(int $id): UserSubmission;
-
-    public function search(array $search = []): LengthAwarePaginator;
+    public function searchAndPaginate(UserSubmissionSearchDto $searchDto, ?PaginationDto $paginationDto): LengthAwarePaginator;
 }

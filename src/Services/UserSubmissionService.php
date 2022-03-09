@@ -2,12 +2,17 @@
 
 namespace EscolaLms\AssignWithoutAccount\Services;
 
-use EscolaLms\AssignWithoutAccount\Enums\UserSubmissionEnum;
-use EscolaLms\AssignWithoutAccount\Events\UserSubmissionAccepted;
-use EscolaLms\AssignWithoutAccount\Models\AccessUrl;
+use EscolaLms\AssignWithoutAccount\Dto\UserSubmissionDto;
+use EscolaLms\AssignWithoutAccount\Dto\UserSubmissionSearchDto;
+use EscolaLms\AssignWithoutAccount\Enums\UserSubmissionStatusEnum;
+use EscolaLms\AssignWithoutAccount\Events\AssignToProduct;
+use EscolaLms\AssignWithoutAccount\Events\AssignToProductable;
 use EscolaLms\AssignWithoutAccount\Models\UserSubmission;
 use EscolaLms\AssignWithoutAccount\Repositories\Contracts\UserSubmissionRepositoryContract;
 use EscolaLms\AssignWithoutAccount\Services\Contracts\UserSubmissionServiceContract;
+use EscolaLms\Cart\Contracts\Productable;
+use EscolaLms\Cart\Models\Product;
+use EscolaLms\Core\Dtos\PaginationDto;
 use EscolaLms\Core\Models\User;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
@@ -21,37 +26,33 @@ class UserSubmissionService implements UserSubmissionServiceContract
         $this->userSubmissionRepository = $userSubmissionRepository;
     }
 
-    public function create(AccessUrl $accessUrl, array $data): UserSubmission
+    public function create(UserSubmissionDto $dto): UserSubmission
     {
-        $submission = [
-            'access_url_id' => $accessUrl->getKey(),
-            'email' => $data['email'],
-            'frontend_url' => $data['frontend_url'],
-            'status' => UserSubmissionEnum::EXPECTED
-        ];
+        // TODO check is registered in productService productRegisterable
+        $dto->setStatus(UserSubmissionStatusEnum::SENT);
+        $userSubmission = $this->userSubmissionRepository->create($dto->toArray());
 
-        return $this->userSubmissionRepository->create($submission);
-    }
-
-    public function accept(int $id): UserSubmission
-    {
-        $userSubmission = $this->userSubmissionRepository->update(['status' => UserSubmissionEnum::ACCEPTED], $id);
-
-        $user = new User();
-        $user->email = $userSubmission->email;
-
-        UserSubmissionAccepted::dispatch($user, $userSubmission->frontend_url);
+        $this->dispatchUserSubmissionAccepted($dto);
 
         return $userSubmission;
     }
 
-    public function reject(int $id): UserSubmission
+    public function searchAndPaginate(UserSubmissionSearchDto $searchDto, ?PaginationDto $paginationDto): LengthAwarePaginator
     {
-        return $this->userSubmissionRepository->update(['status' => UserSubmissionEnum::REJECTED], $id);
+        return $this->userSubmissionRepository->searchAndPaginateByCriteria($searchDto, $paginationDto);
     }
 
-    public function search(array $search = []): LengthAwarePaginator
+    private function dispatchUserSubmissionAccepted(UserSubmissionDto $dto): void
     {
-        return $this->userSubmissionRepository->searchAndPaginate($search);
+        $user = new User();
+        $user->email = $dto->getEmail();
+        $model = $dto->getMorphableType()::find($dto->getMorphableId()); // TODO ??? works but refactor
+
+        if ($model instanceof Product) {
+            AssignToProduct::dispatch($user, $model);
+        }
+        else if ($model instanceof Productable) {
+            AssignToProductable::dispatch($user, $model);
+        }
     }
 }

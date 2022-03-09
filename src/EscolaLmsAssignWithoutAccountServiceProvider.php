@@ -3,9 +3,6 @@
 namespace EscolaLms\AssignWithoutAccount;
 
 use EscolaLms\AssignWithoutAccount\Providers\EventServiceProvider;
-use EscolaLms\AssignWithoutAccount\Providers\ExtendedResourcesServiceProvider;
-use EscolaLms\AssignWithoutAccount\Repositories\AccessUrlRepository;
-use EscolaLms\AssignWithoutAccount\Repositories\Contracts\AccessUrlRepositoryContract;
 use EscolaLms\AssignWithoutAccount\Repositories\Contracts\UserSubmissionRepositoryContract;
 use EscolaLms\AssignWithoutAccount\Repositories\UserSubmissionRepository;
 use EscolaLms\AssignWithoutAccount\Services\Contracts\UserSubmissionServiceContract;
@@ -20,7 +17,6 @@ class EscolaLmsAssignWithoutAccountServiceProvider extends ServiceProvider
     const CONFIG_KEY = 'escolalms_assign_without_account';
 
     public $singletons = [
-        AccessUrlRepositoryContract::class => AccessUrlRepository::class,
         UserSubmissionRepositoryContract::class => UserSubmissionRepository::class,
         UserSubmissionServiceContract::class => UserSubmissionService::class
     ];
@@ -31,7 +27,6 @@ class EscolaLmsAssignWithoutAccountServiceProvider extends ServiceProvider
 
         $this->app->register(AuthServiceProvider::class);
         $this->app->register(EventServiceProvider::class);
-        $this->app->register(ExtendedResourcesServiceProvider::class);
     }
 
     public function boot()

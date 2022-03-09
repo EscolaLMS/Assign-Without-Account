@@ -5,29 +5,29 @@ namespace EscolaLms\AssignWithoutAccount\Models;
 use EscolaLms\AssignWithoutAccount\Database\Factories\UserSubmissionFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class UserSubmission extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'access_url_id',
         'email',
-        'frontend_url',
         'status',
+        'morphable_type',
+        'morphable_id'
     ];
 
     protected $casts = [
-        'access_url_id' => 'integer',
         'email' => 'string',
-        'frontend_url' => 'string',
-        'status' => 'integer',
+        'status' => 'string',
+        'morphable_type' => 'string',
+        'morphable_id' => 'integer'
     ];
 
-    public function accessUrl(): BelongsTo
+    public function morphable(): MorphTo
     {
-        return $this->belongsTo(AccessUrl::class, 'access_url_id');
+        return $this->morphTo();
     }
 
     protected static function newFactory(): UserSubmissionFactory

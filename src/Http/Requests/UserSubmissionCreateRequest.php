@@ -2,28 +2,23 @@
 
 namespace EscolaLms\AssignWithoutAccount\Http\Requests;
 
+use EscolaLms\AssignWithoutAccount\Models\UserSubmission;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Gate;
 
 class UserSubmissionCreateRequest extends FormRequest
 {
-    /**
-     * @return bool
-     */
     public function authorize(): bool
     {
-        return true;
+        return Gate::allows('create', UserSubmission::class);
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
     public function rules(): array
     {
         return [
             'email' => ['required', 'email:rfc,dns', 'string'],
-            'frontend_url' => ['required', 'string'],
+            'morphable_type' => ['required', 'string'],
+            'morphable_id' => ['required', 'numeric'],
         ];
     }
 }

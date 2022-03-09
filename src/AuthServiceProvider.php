@@ -3,7 +3,6 @@
 namespace EscolaLms\AssignWithoutAccount;
 
 use EscolaLms\AssignWithoutAccount\Models\UserSubmission;
-use EscolaLms\AssignWithoutAccount\Policies\AccessUrlPolicy;
 use EscolaLms\AssignWithoutAccount\Policies\UserSubmissionPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Laravel\Passport\Passport;
@@ -16,7 +15,6 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        AccessUrl::class => AccessUrlPolicy::class,
         UserSubmission::class => UserSubmissionPolicy::class,
     ];
 
