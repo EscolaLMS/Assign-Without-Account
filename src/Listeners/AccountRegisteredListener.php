@@ -8,6 +8,7 @@ use EscolaLms\AssignWithoutAccount\Strategies\Contracts\AssignStrategy;
 use EscolaLms\Auth\Events\AccountRegistered;
 use EscolaLms\Cart\Contracts\Productable;
 use EscolaLms\Cart\Models\Product;
+use EscolaLms\Cart\Models\User;
 use EscolaLms\Cart\Services\Contracts\ProductServiceContract;
 use EscolaLms\Core\Repositories\Criteria\Primitives\EqualCriterion;
 
@@ -27,7 +28,9 @@ class AccountRegisteredListener
 
     public function handle(AccountRegistered $event)
     {
-        $user = $event->user;
+        // TODO refactor
+        $user = new User($event->user->toArray());
+        $user->id = $event->user->getKey();
 
         $criteria = [
             new EqualCriterion('email', $user->email),
@@ -50,6 +53,7 @@ class AccountRegisteredListener
             else if ($model instanceof Productable) {
                 $this->productService->attachProductableToUser($model, $user);
             }
+
         }
     }
 

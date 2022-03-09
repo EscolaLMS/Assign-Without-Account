@@ -6,7 +6,7 @@ use EscolaLms\Auth\EscolaLmsAuthServiceProvider;
 use EscolaLms\AssignWithoutAccount\EscolaLmsAssignWithoutAccountServiceProvider;
 use EscolaLms\Cart\EscolaLmsCartServiceProvider;
 use EscolaLms\Cart\Tests\Mocks\ExampleProductableMigration;
-use EscolaLms\Cart\Models\User;
+use EscolaLms\Auth\Models\User;
 use Laravel\Passport\PassportServiceProvider;
 use Spatie\Permission\PermissionServiceProvider;
 
