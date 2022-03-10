@@ -17,11 +17,10 @@ class StrategyContext
         }
         else if (is_a($type, Productable::class, true)) {
             $this->assignStrategy = app(AssignProductableStrategy::class);
-
         }
     }
 
-    public function getAssignStrategy(): AssignStrategy
+    public function getAssignStrategy(): ?AssignStrategy
     {
         return $this->assignStrategy;
     }

@@ -3,17 +3,11 @@
 namespace EscolaLms\AssignWithoutAccount\Listeners;
 
 use EscolaLms\AssignWithoutAccount\Enums\UserSubmissionStatusEnum;
-use EscolaLms\AssignWithoutAccount\Events\AssignToProductable;
 use EscolaLms\AssignWithoutAccount\Repositories\Contracts\UserSubmissionRepositoryContract;
-use EscolaLms\AssignWithoutAccount\Strategies\AssignProductableStrategy;
-use EscolaLms\AssignWithoutAccount\Strategies\AssignProductStrategy;
 use EscolaLms\AssignWithoutAccount\Strategies\Contracts\AssignStrategy;
 use EscolaLms\AssignWithoutAccount\Strategies\StrategyContext;
 use EscolaLms\Auth\Events\AccountRegistered;
-use EscolaLms\Cart\Contracts\Productable;
-use EscolaLms\Cart\Models\Product;
 use EscolaLms\Cart\Models\User;
-use EscolaLms\Cart\Services\Contracts\ProductServiceContract;
 use EscolaLms\Core\Repositories\Criteria\Primitives\EqualCriterion;
 
 class AccountRegisteredListener

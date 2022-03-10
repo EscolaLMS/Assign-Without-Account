@@ -13,12 +13,6 @@ class UserSubmissionDto implements DtoContract, InstantiateFromRequest
     private string $morphable_type;
     private ?string $status;
 
-    /**
-     * @param string $email
-     * @param int $morphable_id
-     * @param string $morphable_type
-     * @param string|null $status
-     */
     public function __construct(string $email, int $morphable_id, string $morphable_type, ?string $status = null)
     {
         $this->email = $email;

@@ -50,7 +50,12 @@ class UserSubmissionServiceTest extends TestCase
             'status' => UserSubmissionStatusEnum::SENT
         ]);
 
-        Event::assertDispatched(AssignToProductable::class);
+        Event::assertDispatched(
+            AssignToProductable::class,
+            fn(AssignToProductable $event) =>
+                $event->getUser()->email === $email
+                && $event->getProductable()->getKey() === $exampleProductable->getKey()
+        );
         Event::assertNotDispatched(AssignToProduct::class);
     }
 
@@ -113,7 +118,12 @@ class UserSubmissionServiceTest extends TestCase
             'status' => UserSubmissionStatusEnum::SENT
         ]);
 
-        Event::assertDispatched(AssignToProduct::class);
+        Event::assertDispatched(
+            AssignToProduct::class,
+            fn(AssignToProduct $event) =>
+                $event->getUser()->email === $email
+                && $event->getProduct()->getKey() === $product->getKey()
+        );
         Event::assertNotDispatched(AssignToProductable::class);
     }
 

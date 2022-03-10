@@ -3,7 +3,6 @@
 namespace EscolaLms\AssignWithoutAccount\Policies;
 
 use EscolaLms\AssignWithoutAccount\Enums\AssignWithoutAccountPermissionEnum;
-use EscolaLms\AssignWithoutAccount\Models\UserSubmission;
 use EscolaLms\Core\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 

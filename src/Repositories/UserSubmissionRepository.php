@@ -15,10 +15,7 @@ class UserSubmissionRepository extends BaseRepository implements UserSubmissionR
 {
     public function getFieldsSearchable(): array
     {
-        return [
-            'email',
-            'status'
-        ];
+        return [];
     }
 
     public function model(): string

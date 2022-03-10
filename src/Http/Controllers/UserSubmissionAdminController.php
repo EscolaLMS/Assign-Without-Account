@@ -29,13 +29,20 @@ class UserSubmissionAdminController extends EscolaLmsBaseController implements U
             PaginationDto::instantiateFromRequest($request),
         );
 
-        return $this->sendResponseForResource(UserSubmissionResource::collection($result), "User submissions retrieved successfully");
+        return $this->sendResponseForResource(
+            UserSubmissionResource::collection($result),
+            "User submissions retrieved successfully"
+        );
     }
 
     public function create(UserSubmissionCreateRequest $request): JsonResponse
     {
         $dto = UserSubmissionDto::instantiateFromRequest($request);
         $result = $this->userSubmissionService->create($dto);
-        return $this->sendResponseForResource(UserSubmissionResource::make($result), "User submissions created successfully");
+
+        return $this->sendResponseForResource(
+            UserSubmissionResource::make($result),
+            "User submissions created successfully"
+        );
     }
 }
