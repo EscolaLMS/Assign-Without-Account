@@ -15,7 +15,6 @@ use EscolaLms\Cart\Tests\Mocks\ExampleProductable;
 use EscolaLms\Core\Tests\CreatesUsers;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Notification;
 
@@ -26,18 +25,16 @@ class AssignToProductableTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+
         $this->seed(AssignWithoutAccountPermissionSeeder::class);
-        Config::set('escola_auth.registration', SettingStatusEnum::ENABLED);
-        Config::set('escola_auth.account_must_be_enabled_by_admin', SettingStatusEnum::DISABLED);
-        Config::set('escola_auth.additional_fields_required', []);
         Shop::registerProductableClass(ExampleProductable::class);
+
+        Event::fake([AssignToProductable::class, ProductableAttached::class]);
+        Notification::fake();
     }
 
     public function testAssignToProductable(): void
     {
-        Event::fake([AssignToProductable::class, ProductableAttached::class]);
-        Notification::fake();
-
         $productable = ExampleProductable::factory()->create();
         $email = 'email@test.pl';
 
@@ -54,9 +51,6 @@ class AssignToProductableTest extends TestCase
 
     public function testAssignToMultipleProductables(): void
     {
-        Event::fake([AssignToProductable::class, ProductableAttached::class]);
-        Notification::fake();
-
         $productable1 = ExampleProductable::factory()->create();
         $productable2 = ExampleProductable::factory()->create();
         $productable3 = ExampleProductable::factory()->create();
@@ -80,9 +74,6 @@ class AssignToProductableTest extends TestCase
 
     public function testMultipleAssignmentsToProductable(): void
     {
-        Event::fake([AssignToProductable::class, ProductableAttached::class]);
-        Notification::fake();
-
         $productable = ExampleProductable::factory()->create();
         $email1 = 'email1@test.pl';
         $email2 = 'email2@test.pl';

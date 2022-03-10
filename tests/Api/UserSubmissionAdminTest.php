@@ -16,7 +16,6 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Testing\TestResponse;
-use InvalidArgumentException;
 
 class UserSubmissionAdminTest extends TestCase
 {

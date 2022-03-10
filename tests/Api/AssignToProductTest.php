@@ -5,7 +5,6 @@ namespace EscolaLms\AssignWithoutAccount\Tests\Api;
 use EscolaLms\AssignWithoutAccount\Database\Seeders\AssignWithoutAccountPermissionSeeder;
 use EscolaLms\AssignWithoutAccount\Events\AssignToProduct;
 use EscolaLms\AssignWithoutAccount\Tests\TestCase;
-use EscolaLms\Auth\Enums\SettingStatusEnum;
 use EscolaLms\Auth\Events\AccountRegistered;
 use EscolaLms\Auth\Models\User as AuthUser;
 use EscolaLms\Cart\Events\ProductAttached;
@@ -13,7 +12,6 @@ use EscolaLms\Cart\Models\Product;
 use EscolaLms\Core\Tests\CreatesUsers;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Notification;
 
@@ -25,16 +23,12 @@ class AssignToProductTest extends TestCase
     {
         parent::setUp();
         $this->seed(AssignWithoutAccountPermissionSeeder::class);
-        Config::set('escola_auth.registration', SettingStatusEnum::ENABLED);
-        Config::set('escola_auth.account_must_be_enabled_by_admin', SettingStatusEnum::DISABLED);
-        Config::set('escola_auth.additional_fields_required', []);
+        Event::fake([AssignToProduct::class, ProductAttached::class]);
+        Notification::fake();
     }
 
     public function testAssignToProduct(): void
     {
-        Event::fake([AssignToProduct::class, ProductAttached::class]);
-        Notification::fake();
-
         $product = Product::factory()->create();
         $email = 'email@test.pl';
 
@@ -51,9 +45,6 @@ class AssignToProductTest extends TestCase
 
     public function testAssignToMultipleProducts(): void
     {
-        Event::fake([AssignToProduct::class, ProductAttached::class]);
-        Notification::fake();
-
         $product1 = Product::factory()->create();
         $product2 = Product::factory()->create();
         $product3 = Product::factory()->create();
@@ -76,9 +67,6 @@ class AssignToProductTest extends TestCase
 
     public function testMultipleAssignmentsToProduct(): void
     {
-        Event::fake([AssignToProduct::class, ProductAttached::class]);
-        Notification::fake();
-
         $product = Product::factory()->create();
         $email1 = 'email1@test.pl';
         $email2 = 'email2@test.pl';

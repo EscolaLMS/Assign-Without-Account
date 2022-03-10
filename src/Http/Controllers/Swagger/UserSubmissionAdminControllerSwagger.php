@@ -57,6 +57,43 @@ interface UserSubmissionAdminControllerSwagger
      */
     public function index(UserSubmissionListRequest $request): JsonResponse;
 
-    // TODO swagger
+    /**
+     * @OA\Post(
+     *     path="/api/admin/user-submissions",
+     *     summary="Create a new user submission identified by id",
+     *     tags={"Assign Without Account"},
+     *     security={
+     *         {"passport": {}},
+     *     },
+     *     @OA\RequestBody(
+     *         description="User submission attributes",
+     *         required=true,
+     *         @OA\JsonContent(ref="#/components/schemas/UserSubmission")
+     *     ),
+     *     @OA\Response(
+     *          response=200,
+     *          description="User submission created successfully",
+     *      ),
+     *     @OA\Response(
+     *          response=401,
+     *          description="Endpoint requires authentication",
+     *      ),
+     *     @OA\Response(
+     *          response=403,
+     *          description="User doesn't have required access rights",
+     *      ),
+     *     @OA\Response(
+     *          response=422,
+     *          description="One of the parameters has invalid format",
+     *      ),
+     *     @OA\Response(
+     *          response=500,
+     *          description="Server-side error",
+     *      ),
+     * )
+     *
+     * @param UserSubmissionCreateRequest $request
+     * @return JsonResponse
+     */
     public function create(UserSubmissionCreateRequest $request): JsonResponse;
 }
