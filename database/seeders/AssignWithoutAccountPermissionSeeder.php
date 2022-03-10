@@ -15,8 +15,6 @@ class AssignWithoutAccountPermissionSeeder extends Seeder
     {
         $admin = Role::findOrCreate('admin', 'api');
 
-        // TODO delete old permissions
-
         foreach (AssignWithoutAccountPermissionEnum::asArray() as $const => $value) {
             Permission::findOrCreate($value, 'api');
         }
