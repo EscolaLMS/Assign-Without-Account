@@ -8,6 +8,7 @@ use EscolaLms\AssignWithoutAccount\Events\AssignToProduct;
 use EscolaLms\AssignWithoutAccount\Events\AssignToProductable;
 use EscolaLms\AssignWithoutAccount\Models\UserSubmission;
 use EscolaLms\AssignWithoutAccount\Tests\TestCase;
+use EscolaLms\Cart\Facades\Shop;
 use EscolaLms\Cart\Models\Product;
 use EscolaLms\Cart\Tests\Mocks\ExampleProductable;
 use EscolaLms\Core\Tests\CreatesUsers;
@@ -15,6 +16,7 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Testing\TestResponse;
+use InvalidArgumentException;
 
 class UserSubmissionAdminTest extends TestCase
 {
@@ -169,6 +171,7 @@ class UserSubmissionAdminTest extends TestCase
     public function testCreateUserSubmissionToProductable()
     {
         Event::fake();
+        Shop::registerProductableClass(ExampleProductable::class);
 
         $exampleProductable = ExampleProductable::factory()->create();
         $admin = $this->makeAdmin();
@@ -197,6 +200,24 @@ class UserSubmissionAdminTest extends TestCase
 
         Event::assertDispatched(AssignToProductable::class);
         Event::assertNotDispatched(AssignToProduct::class);
+    }
+
+    public function testCreateUserSubmissionToNotRegisteredProductable()
+    {
+        Event::fake();
+
+        $exampleProductable = ExampleProductable::factory()->create();
+        $admin = $this->makeAdmin();
+        $email = 'test@test.pl';
+
+        $this->actingAs($admin, 'api')
+            ->json('POST', '/api/admin/user-submissions', [
+                'email' => $email,
+                'morphable_id' => $exampleProductable->getKey(),
+                'morphable_type' => ExampleProductable::class,
+            ]);
+
+        Event::assertNotDispatched(AssignToProductable::class);
     }
 
     public function testCreateUserSubmissionInvalidData()

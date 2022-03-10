@@ -3,8 +3,12 @@
 namespace EscolaLms\AssignWithoutAccount\Listeners;
 
 use EscolaLms\AssignWithoutAccount\Enums\UserSubmissionStatusEnum;
+use EscolaLms\AssignWithoutAccount\Events\AssignToProductable;
 use EscolaLms\AssignWithoutAccount\Repositories\Contracts\UserSubmissionRepositoryContract;
+use EscolaLms\AssignWithoutAccount\Strategies\AssignProductableStrategy;
+use EscolaLms\AssignWithoutAccount\Strategies\AssignProductStrategy;
 use EscolaLms\AssignWithoutAccount\Strategies\Contracts\AssignStrategy;
+use EscolaLms\AssignWithoutAccount\Strategies\StrategyContext;
 use EscolaLms\Auth\Events\AccountRegistered;
 use EscolaLms\Cart\Contracts\Productable;
 use EscolaLms\Cart\Models\Product;
@@ -15,20 +19,16 @@ use EscolaLms\Core\Repositories\Criteria\Primitives\EqualCriterion;
 class AccountRegisteredListener
 {
     private UserSubmissionRepositoryContract $userSubmissionRepository;
-    private ProductServiceContract $productService;
 
     public function __construct(
         UserSubmissionRepositoryContract $userSubmissionRepository,
-        ProductServiceContract $productService
     )
     {
         $this->userSubmissionRepository = $userSubmissionRepository;
-        $this->productService = $productService;
     }
 
     public function handle(AccountRegistered $event)
     {
-        // TODO refactor
         $user = new User($event->user->toArray());
         $user->id = $event->user->getKey();
 
@@ -40,32 +40,13 @@ class AccountRegisteredListener
         $results = $this->userSubmissionRepository->searchByCriteria($criteria);
 
         foreach ($results as $result) {
+            $this->getStrategy($result->morphable_type)->assign($result->morphable_type, $result->morphable_id, $user);
             $result->update(['status' => UserSubmissionStatusEnum::ACCEPTED]);
-            $model = $result->morphable_type::find($result->morphable_id);
-
-            if (!$model) {
-                continue;
-            }
-
-            if ($model instanceof Product) {
-                $this->productService->attachProductToUser($model, $user);
-            }
-            else if ($model instanceof Productable) {
-                $this->productService->attachProductableToUser($model, $user);
-            }
-
         }
     }
 
-//    private function getStrategy(string $modelType): ?AssignStrategy
-//    {
-//        $class = class_basename($modelType);
-//        $strategy = 'EscolaLms\\AssignWithoutAccount\\Strategies\\' . $class . 'AssignStrategy';
-//
-//        if (!class_exists($strategy)) {
-//            return null;
-//        }
-//
-//        return new $strategy();
-//    }
+    private function getStrategy(string $morphType): ?AssignStrategy
+    {
+        return (new StrategyContext($morphType))->getAssignStrategy();
+    }
 }

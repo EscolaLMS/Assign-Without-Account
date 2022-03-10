@@ -5,15 +5,12 @@ namespace EscolaLms\AssignWithoutAccount\Services;
 use EscolaLms\AssignWithoutAccount\Dto\UserSubmissionDto;
 use EscolaLms\AssignWithoutAccount\Dto\UserSubmissionSearchDto;
 use EscolaLms\AssignWithoutAccount\Enums\UserSubmissionStatusEnum;
-use EscolaLms\AssignWithoutAccount\Events\AssignToProduct;
-use EscolaLms\AssignWithoutAccount\Events\AssignToProductable;
 use EscolaLms\AssignWithoutAccount\Models\UserSubmission;
 use EscolaLms\AssignWithoutAccount\Repositories\Contracts\UserSubmissionRepositoryContract;
 use EscolaLms\AssignWithoutAccount\Services\Contracts\UserSubmissionServiceContract;
-use EscolaLms\Cart\Contracts\Productable;
-use EscolaLms\Cart\Models\Product;
+use EscolaLms\AssignWithoutAccount\Strategies\Contracts\AssignStrategy;
+use EscolaLms\AssignWithoutAccount\Strategies\StrategyContext;
 use EscolaLms\Core\Dtos\PaginationDto;
-use EscolaLms\Core\Models\User;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class UserSubmissionService implements UserSubmissionServiceContract
@@ -28,13 +25,15 @@ class UserSubmissionService implements UserSubmissionServiceContract
 
     public function create(UserSubmissionDto $dto): UserSubmission
     {
-        // TODO check is registered in productService productRegisterable
+        $strategy = $this->getStrategy($dto->getMorphableType());
+        $model = $strategy->getModelInstance($dto->getMorphableType(), $dto->getMorphableId());
+
         $dto->setStatus(UserSubmissionStatusEnum::SENT);
-        $userSubmission = $this->userSubmissionRepository->create($dto->toArray());
+        $submission =  $this->userSubmissionRepository->create($dto->toArray());
 
-        $this->dispatchUserSubmissionAccepted($dto);
+        $strategy->dispatch($dto->getEmail(), $model);
 
-        return $userSubmission;
+        return $submission;
     }
 
     public function searchAndPaginate(UserSubmissionSearchDto $searchDto, ?PaginationDto $paginationDto): LengthAwarePaginator
@@ -42,17 +41,8 @@ class UserSubmissionService implements UserSubmissionServiceContract
         return $this->userSubmissionRepository->searchAndPaginateByCriteria($searchDto, $paginationDto);
     }
 
-    private function dispatchUserSubmissionAccepted(UserSubmissionDto $dto): void
+    private function getStrategy(string $morphType): ?AssignStrategy
     {
-        $user = new User();
-        $user->email = $dto->getEmail();
-        $model = $dto->getMorphableType()::find($dto->getMorphableId()); // TODO ??? works but refactor
-
-        if ($model instanceof Product) {
-            AssignToProduct::dispatch($user, $model);
-        }
-        else if ($model instanceof Productable) {
-            AssignToProductable::dispatch($user, $model);
-        }
+        return (new StrategyContext($morphType))->getAssignStrategy();
     }
 }

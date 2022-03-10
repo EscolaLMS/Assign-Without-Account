@@ -10,6 +10,7 @@ use EscolaLms\Auth\Events\AccountRegistered;
 use EscolaLms\Auth\Models\User as AuthUser;
 use EscolaLms\Cart\Contracts\Productable;
 use EscolaLms\Cart\Events\ProductableAttached;
+use EscolaLms\Cart\Facades\Shop;
 use EscolaLms\Cart\Tests\Mocks\ExampleProductable;
 use EscolaLms\Core\Tests\CreatesUsers;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -29,6 +30,7 @@ class AssignToProductableTest extends TestCase
         Config::set('escola_auth.registration', SettingStatusEnum::ENABLED);
         Config::set('escola_auth.account_must_be_enabled_by_admin', SettingStatusEnum::DISABLED);
         Config::set('escola_auth.additional_fields_required', []);
+        Shop::registerProductableClass(ExampleProductable::class);
     }
 
     public function testAssignToProductable(): void

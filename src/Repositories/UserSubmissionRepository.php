@@ -26,7 +26,6 @@ class UserSubmissionRepository extends BaseRepository implements UserSubmissionR
         return UserSubmission::class;
     }
 
-    // TODO orderDto
     public function searchAndPaginateByCriteria(UserSubmissionSearchDto $searchDto, ?PaginationDto $paginationDto = null): LengthAwarePaginator
     {
         $criteria = $this->makeCriteria($searchDto);
