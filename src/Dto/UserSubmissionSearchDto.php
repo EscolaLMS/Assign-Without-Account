@@ -9,15 +9,15 @@ use Illuminate\Http\Request;
 class UserSubmissionSearchDto implements DtoContract, InstantiateFromRequest
 {
     private ?string $email;
-    private ?int $morphable_id;
-    private ?string $morphable_type;
+    private ?int $morphableId;
+    private ?string $morphableType;
     private ?string $status;
 
-    public function __construct(?string $email, ?int $morphable_id, ?string $morphable_type, ?string $status)
+    public function __construct(?string $email, ?int $morphableId, ?string $morphableType, ?string $status)
     {
         $this->email = $email;
-        $this->morphable_id = $morphable_id;
-        $this->morphable_type = $morphable_type;
+        $this->morphableId = $morphableId;
+        $this->morphableType = $morphableType;
         $this->status = $status;
     }
 
@@ -25,8 +25,8 @@ class UserSubmissionSearchDto implements DtoContract, InstantiateFromRequest
     {
         return [
             'email' => $this->email,
-            'morphable_id' => $this->morphable_id,
-            'morphable_type' => $this->morphable_type,
+            'morphable_id' => $this->morphableId,
+            'morphable_type' => $this->morphableType,
             'status' => $this->status,
         ];
     }
@@ -48,12 +48,12 @@ class UserSubmissionSearchDto implements DtoContract, InstantiateFromRequest
 
     public function getMorphableId(): ?int
     {
-        return $this->morphable_id;
+        return $this->morphableId;
     }
 
     public function getMorphableType(): ?string
     {
-        return $this->morphable_type;
+        return $this->morphableType;
     }
 
     public function getStatus(): ?string

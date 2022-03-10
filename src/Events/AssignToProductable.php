@@ -12,9 +12,9 @@ class AssignToProductable
     use Dispatchable, SerializesModels;
 
     private User $user;
-    private ?Productable $productable;
+    private Productable $productable;
 
-    public function __construct(User $user, ?Productable $productable)
+    public function __construct(User $user, Productable $productable)
     {
         $this->user = $user;
         $this->productable = $productable;
@@ -25,7 +25,7 @@ class AssignToProductable
         return $this->user;
     }
 
-    public function getProductable(): ?Productable
+    public function getProductable(): Productable
     {
         return $this->productable;
     }

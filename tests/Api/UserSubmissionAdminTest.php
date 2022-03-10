@@ -43,14 +43,14 @@ class UserSubmissionAdminTest extends TestCase
     public function testIndexFilterByMorphType(): void
     {
         $admin = $this->makeAdmin();
-        $morphable_type = 'EscolaLms\\Test\\Models\\Test';
+        $morphableType = 'EscolaLms\\Test\\Models\\Test';
         UserSubmission::factory()->count(10)->create();
         UserSubmission::factory()->count(5)->create([
-            'morphable_type' => $morphable_type
+            'morphable_type' => $morphableType
         ]);
 
         $response = $this->actingAs($admin, 'api')
-            ->json('GET', '/api/admin/user-submissions?morphable_type=' . $morphable_type)
+            ->json('GET', '/api/admin/user-submissions?morphable_type=' . $morphableType)
             ->assertOk();
 
         $this->assertApiIndexResponse($response, 5);
@@ -61,19 +61,19 @@ class UserSubmissionAdminTest extends TestCase
     {
         $admin = $this->makeAdmin();
 
-        $morphable_id = 1;
-        $morphable_type = 'EscolaLms\\Test\\Models\\Test';
+        $morphableId = 1;
+        $morphableType = 'EscolaLms\\Test\\Models\\Test';
         UserSubmission::factory()->count(10)->create();
         UserSubmission::factory()->count(5)->create([
-            'morphable_id' => $morphable_id,
-            'morphable_type' => $morphable_type
+            'morphable_id' => $morphableId,
+            'morphable_type' => $morphableType
         ]);
         UserSubmission::factory()->count(5)->create([
-            'morphable_type' => $morphable_type
+            'morphable_type' => $morphableType
         ]);
 
         $response = $this->actingAs($admin, 'api')
-            ->json('GET', '/api/admin/user-submissions?morphable_id=' . $morphable_id . '&morphable_type=' . $morphable_type)
+            ->json('GET', '/api/admin/user-submissions?morphable_id=' . $morphableId . '&morphable_type=' . $morphableType)
             ->assertOk();
 
         $this->assertApiIndexResponse($response, 5);
@@ -84,14 +84,14 @@ class UserSubmissionAdminTest extends TestCase
     {
         $admin = $this->makeAdmin();
 
-        $morphable_id = 1;
+        $morphableId = 1;
         UserSubmission::factory()->count(5)->create();
         UserSubmission::factory()->count(5)->create([
-            'morphable_id' => $morphable_id,
+            'morphable_id' => $morphableId,
         ]);
 
         $response = $this->actingAs($admin, 'api')
-            ->json('GET', '/api/admin/user-submissions?morphable_id=' . $morphable_id)
+            ->json('GET', '/api/admin/user-submissions?morphable_id=' . $morphableId)
             ->assertOk();
 
         $this->assertApiIndexResponse($response, 10);

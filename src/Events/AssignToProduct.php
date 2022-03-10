@@ -12,9 +12,9 @@ class AssignToProduct
     use Dispatchable, SerializesModels;
 
     private User $user;
-    private ?Product $product;
+    private Product $product;
 
-    public function __construct(User $user, ?Product $product)
+    public function __construct(User $user, Product $product)
     {
         $this->user = $user;
         $this->product = $product;
@@ -25,7 +25,7 @@ class AssignToProduct
         return $this->user;
     }
 
-    public function getProduct(): ?Product
+    public function getProduct(): Product
     {
         return $this->product;
     }
