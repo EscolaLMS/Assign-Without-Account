@@ -16,13 +16,18 @@ class UserSubmissionPolicy
         return $user->can(AssignWithoutAccountPermissionEnum::USER_SUBMISSION_LIST);
     }
 
-    public function accept(User $user, UserSubmission $userSubmission): bool
+    public function create(User $user): bool
     {
-        return $user->can(AssignWithoutAccountPermissionEnum::USER_SUBMISSION_ACCEPT);
+        return $user->can(AssignWithoutAccountPermissionEnum::USER_SUBMISSION_CREATE);
     }
 
-    public function reject(User $user, UserSubmission $userSubmission): bool
+    public function update(User $user, UserSubmission $userSubmission): bool
     {
-        return $user->can(AssignWithoutAccountPermissionEnum::USER_SUBMISSION_REJECT);
+        return $user->can(AssignWithoutAccountPermissionEnum::USER_SUBMISSION_UPDATE);
+    }
+
+    public function delete(User $user, UserSubmission $userSubmission): bool
+    {
+        return $user->can(AssignWithoutAccountPermissionEnum::USER_SUBMISSION_DELETE);
     }
 }

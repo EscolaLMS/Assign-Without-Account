@@ -5,15 +5,13 @@
   "require": {
     "php": "^7.4|^8.0",
     "laravel/framework": "^8|^9",
-    "escolalms/core": "^1.2.2"
+    "escolalms/core": "^1.2.2",
+    "escolalms/cart": "^0"
   },
   "require-dev": {
     "phpunit/phpunit": "^9.0",
     "orchestra/testbench": ">=5.0",
-    "escolalms/auth": "^0",
-    "escolalms/courses": "^0",
-    "escolalms/topic-types": "^0",
-    "escolalms/templates": "^0"
+    "escolalms/auth": "^0"
   },
   "license": "MIT",
   "authors": [

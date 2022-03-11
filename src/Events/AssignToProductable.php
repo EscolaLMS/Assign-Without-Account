@@ -2,40 +2,31 @@
 
 namespace EscolaLms\AssignWithoutAccount\Events;
 
+use EscolaLms\Cart\Contracts\Productable;
 use EscolaLms\Core\Models\User;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class UserSubmissionAccepted
+class AssignToProductable
 {
     use Dispatchable, SerializesModels;
 
     private User $user;
-    private string $url;
+    private Productable $productable;
 
-    /**
-     * @param User $user
-     * @param string $url
-     */
-    public function __construct(User $user, string $url)
+    public function __construct(User $user, Productable $productable)
     {
         $this->user = $user;
-        $this->url = $url;
+        $this->productable = $productable;
     }
 
-    /**
-     * @return User
-     */
     public function getUser(): User
     {
         return $this->user;
     }
 
-    /**
-     * @return string
-     */
-    public function getUrl(): string
+    public function getProductable(): Productable
     {
-        return $this->url;
+        return $this->productable;
     }
 }

@@ -4,12 +4,12 @@ namespace EscolaLms\AssignWithoutAccount\Http\Requests;
 
 use Illuminate\Support\Facades\Gate;
 
-class AccessUrlDeleteRequest extends AccessUrlRequest
+class UserSubmissionDeleteRequest extends UserSubmissionRequest
 {
     public function authorize(): bool
     {
-        $accessUrl = $this->getAccessUrl();
-        return Gate::allows('delete', $accessUrl);
+        $userSubmission = $this->getUserSubmission();
+        return Gate::allows('delete', $userSubmission);
     }
 
     public function rules(): array

@@ -2,95 +2,14 @@
 
 namespace EscolaLms\AssignWithoutAccount\Http\Controllers\Swagger;
 
-use EscolaLms\AssignWithoutAccount\Http\Requests\UserSubmissionAcceptRequest;
+use EscolaLms\AssignWithoutAccount\Http\Requests\UserSubmissionCreateRequest;
+use EscolaLms\AssignWithoutAccount\Http\Requests\UserSubmissionDeleteRequest;
 use EscolaLms\AssignWithoutAccount\Http\Requests\UserSubmissionListRequest;
-use EscolaLms\AssignWithoutAccount\Http\Requests\UserSubmissionRejectRequest;
+use EscolaLms\AssignWithoutAccount\Http\Requests\UserSubmissionUpdateRequest;
 use Illuminate\Http\JsonResponse;
 
 interface UserSubmissionAdminControllerSwagger
 {
-    /**
-     * @OA\GET(
-     *     path="/api/admin/user-submissions/accpet/{id}",
-     *     summary="Accept user submission identified by a id",
-     *     tags={"Assign Without Account"},
-     *     security={
-     *         {"passport": {}},
-     *     },
-     *     @OA\Parameter(
-     *         description="Unique human-readable user submission identifier",
-     *         in="path",
-     *         name="id",
-     *         required=true,
-     *         @OA\Schema(
-     *             type="integer"
-     *         )
-     *     ),
-     *     @OA\Response(
-     *          response=200,
-     *          description="User submission accepted successfully",
-     *      ),
-     *     @OA\Response(
-     *          response=401,
-     *          description="Endpoint requires authentication",
-     *      ),
-     *     @OA\Response(
-     *          response=403,
-     *          description="User doesn't have required access rights",
-     *      ),
-     *     @OA\Response(
-     *          response=500,
-     *          description="Server-side error",
-     *      ),
-     * )
-     *
-     * @param UserSubmissionAcceptRequest $request
-     * @param int $id
-     * @return JsonResponse
-     */
-    public function accept(UserSubmissionAcceptRequest $request, int $id): JsonResponse;
-
-    /**
-     * @OA\GET(
-     *     path="/api/admin/user-submissions/reject/{id}",
-     *     summary="Reject user submission identified by a id",
-     *     tags={"Assign Without Account"},
-     *     security={
-     *         {"passport": {}},
-     *     },
-     *     @OA\Parameter(
-     *         description="Unique human-readable user submission identifier",
-     *         in="path",
-     *         name="id",
-     *         required=true,
-     *         @OA\Schema(
-     *             type="integer"
-     *         )
-     *     ),
-     *     @OA\Response(
-     *          response=200,
-     *          description="User submission rejected successfully",
-     *      ),
-     *     @OA\Response(
-     *          response=401,
-     *          description="Endpoint requires authentication",
-     *      ),
-     *     @OA\Response(
-     *          response=403,
-     *          description="User doesn't have required access rights",
-     *      ),
-     *     @OA\Response(
-     *          response=500,
-     *          description="Server-side error",
-     *      ),
-     * )
-     *
-     * @param UserSubmissionRejectRequest $request
-     * @param int $id
-     * @return JsonResponse
-     */
-    public function reject(UserSubmissionRejectRequest $request, int $id): JsonResponse;
-
     /**
      * @OA\Get(
      *     path="/api/admin/user-submissions",
@@ -139,4 +58,135 @@ interface UserSubmissionAdminControllerSwagger
      * @return JsonResponse
      */
     public function index(UserSubmissionListRequest $request): JsonResponse;
+
+    /**
+     * @OA\Post(
+     *     path="/api/admin/user-submissions",
+     *     summary="Create a new user submission identified by id",
+     *     tags={"Assign Without Account"},
+     *     security={
+     *         {"passport": {}},
+     *     },
+     *     @OA\RequestBody(
+     *         description="User submission attributes",
+     *         required=true,
+     *         @OA\JsonContent(ref="#/components/schemas/UserSubmission")
+     *     ),
+     *     @OA\Response(
+     *          response=200,
+     *          description="User submission created successfully",
+     *      ),
+     *     @OA\Response(
+     *          response=401,
+     *          description="Endpoint requires authentication",
+     *      ),
+     *     @OA\Response(
+     *          response=403,
+     *          description="User doesn't have required access rights",
+     *      ),
+     *     @OA\Response(
+     *          response=422,
+     *          description="One of the parameters has invalid format",
+     *      ),
+     *     @OA\Response(
+     *          response=500,
+     *          description="Server-side error",
+     *      ),
+     * )
+     *
+     * @param UserSubmissionCreateRequest $request
+     * @return JsonResponse
+     */
+    public function create(UserSubmissionCreateRequest $request): JsonResponse;
+
+    /**
+     * @OA\Put (
+     *     path="/api/admin/user-submissions/{id}",
+     *     summary="Update an existing user submission identified by id",
+     *     tags={"Assign Without Account"},
+     *     security={
+     *         {"passport": {}},
+     *     },
+     *     @OA\Parameter(
+     *         description="Unique human-readable user submission identifier",
+     *         in="path",
+     *         name="id",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="integer"
+     *         )
+     *     ),
+     *     @OA\RequestBody(
+     *         description="User submission attributes",
+     *         required=true,
+     *         @OA\JsonContent(ref="#/components/schemas/UserSubmission")
+     *     ),
+     *     @OA\Response(
+     *          response=200,
+     *          description="User submission created successfully",
+     *      ),
+     *     @OA\Response(
+     *          response=401,
+     *          description="Endpoint requires authentication",
+     *      ),
+     *     @OA\Response(
+     *          response=403,
+     *          description="User doesn't have required access rights",
+     *      ),
+     *     @OA\Response(
+     *          response=422,
+     *          description="One of the parameters has invalid format",
+     *      ),
+     *     @OA\Response(
+     *          response=500,
+     *          description="Server-side error",
+     *      ),
+     * )
+     *
+     * @param UserSubmissionUpdateRequest $request
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function update(UserSubmissionUpdateRequest $request, int $id): JsonResponse;
+
+    /**
+     * @OA\Delete(
+     *     path="/api/admin/user-submissions/{id}",
+     *     summary="Delete user submission identified by a id",
+     *     tags={"Assign Without Account"},
+     *     security={
+     *         {"passport": {}},
+     *     },
+     *     @OA\Parameter(
+     *         description="Unique human-readable access url identifier",
+     *         in="path",
+     *         name="id",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="integer"
+     *         )
+     *     ),
+     *     @OA\Response(
+     *          response=200,
+     *          description="User submission eleted successfully",
+     *      ),
+     *     @OA\Response(
+     *          response=401,
+     *          description="Endpoint requires authentication",
+     *      ),
+     *     @OA\Response(
+     *          response=403,
+     *          description="User doesn't have required access rights",
+     *      ),
+     *     @OA\Response(
+     *          response=500,
+     *          description="Server-side error",
+     *      ),
+     * )
+     *
+     * @param UserSubmissionDeleteRequest $request
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function delete(UserSubmissionDeleteRequest $request, int $id): JsonResponse;
 }

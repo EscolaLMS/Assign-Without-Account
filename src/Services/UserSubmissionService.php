@@ -2,13 +2,15 @@
 
 namespace EscolaLms\AssignWithoutAccount\Services;
 
-use EscolaLms\AssignWithoutAccount\Enums\UserSubmissionEnum;
-use EscolaLms\AssignWithoutAccount\Events\UserSubmissionAccepted;
-use EscolaLms\AssignWithoutAccount\Models\AccessUrl;
+use EscolaLms\AssignWithoutAccount\Dto\UserSubmissionDto;
+use EscolaLms\AssignWithoutAccount\Dto\UserSubmissionSearchDto;
+use EscolaLms\AssignWithoutAccount\Enums\UserSubmissionStatusEnum;
 use EscolaLms\AssignWithoutAccount\Models\UserSubmission;
 use EscolaLms\AssignWithoutAccount\Repositories\Contracts\UserSubmissionRepositoryContract;
 use EscolaLms\AssignWithoutAccount\Services\Contracts\UserSubmissionServiceContract;
-use EscolaLms\Core\Models\User;
+use EscolaLms\AssignWithoutAccount\Strategies\Contracts\AssignStrategy;
+use EscolaLms\AssignWithoutAccount\Strategies\StrategyContext;
+use EscolaLms\Core\Dtos\PaginationDto;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class UserSubmissionService implements UserSubmissionServiceContract
@@ -21,37 +23,36 @@ class UserSubmissionService implements UserSubmissionServiceContract
         $this->userSubmissionRepository = $userSubmissionRepository;
     }
 
-    public function create(AccessUrl $accessUrl, array $data): UserSubmission
+    public function create(UserSubmissionDto $dto): UserSubmission
     {
-        $submission = [
-            'access_url_id' => $accessUrl->getKey(),
-            'email' => $data['email'],
-            'frontend_url' => $data['frontend_url'],
-            'status' => UserSubmissionEnum::EXPECTED
-        ];
+        $strategy = $this->getStrategy($dto->getMorphableType());
+        $model = $strategy->getModelInstance($dto->getMorphableType(), $dto->getMorphableId());
 
-        return $this->userSubmissionRepository->create($submission);
+        $dto->setStatus(UserSubmissionStatusEnum::SENT);
+        $submission =  $this->userSubmissionRepository->create($dto->toArray());
+
+        $strategy->dispatch($dto->getEmail(), $model);
+
+        return $submission;
     }
 
-    public function accept(int $id): UserSubmission
+    public function update(UserSubmissionDto $dto, int $id): UserSubmission
     {
-        $userSubmission = $this->userSubmissionRepository->update(['status' => UserSubmissionEnum::ACCEPTED], $id);
-
-        $user = new User();
-        $user->email = $userSubmission->email;
-
-        UserSubmissionAccepted::dispatch($user, $userSubmission->frontend_url);
-
-        return $userSubmission;
+        return $this->userSubmissionRepository->update($dto->toArray(), $id);
     }
 
-    public function reject(int $id): UserSubmission
+    public function delete(int $id): bool
     {
-        return $this->userSubmissionRepository->update(['status' => UserSubmissionEnum::REJECTED], $id);
+        return $this->userSubmissionRepository->delete($id);
     }
 
-    public function search(array $search = []): LengthAwarePaginator
+    public function searchAndPaginate(UserSubmissionSearchDto $searchDto, ?PaginationDto $paginationDto): LengthAwarePaginator
     {
-        return $this->userSubmissionRepository->searchAndPaginate($search);
+        return $this->userSubmissionRepository->searchAndPaginateByCriteria($searchDto, $paginationDto);
+    }
+
+    private function getStrategy(string $morphType): ?AssignStrategy
+    {
+        return (new StrategyContext($morphType))->getAssignStrategy();
     }
 }

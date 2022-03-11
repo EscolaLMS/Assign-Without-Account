@@ -20,13 +20,10 @@ class AssignWithoutAccountPermissionSeeder extends Seeder
         }
 
         $admin->givePermissionTo([
-            AssignWithoutAccountPermissionEnum::ACCESS_URL_CREATE,
-            AssignWithoutAccountPermissionEnum::ACCESS_URL_DELETE,
-            AssignWithoutAccountPermissionEnum::ACCESS_URL_UPDATE,
-            AssignWithoutAccountPermissionEnum::ACCESS_URL_LIST,
             AssignWithoutAccountPermissionEnum::USER_SUBMISSION_LIST,
-            AssignWithoutAccountPermissionEnum::USER_SUBMISSION_ACCEPT,
-            AssignWithoutAccountPermissionEnum::USER_SUBMISSION_REJECT,
+            AssignWithoutAccountPermissionEnum::USER_SUBMISSION_CREATE,
+            AssignWithoutAccountPermissionEnum::USER_SUBMISSION_UPDATE,
+            AssignWithoutAccountPermissionEnum::USER_SUBMISSION_DELETE,
         ]);
     }
 }

@@ -2,9 +2,14 @@
 
 namespace EscolaLms\AssignWithoutAccount\Strategies\Contracts;
 
-use Illuminate\Contracts\Auth\Authenticatable;
+use EscolaLms\Core\Models\User;
+use Illuminate\Database\Eloquent\Model;
 
 interface AssignStrategy
 {
-    public function assign(Authenticatable $user, int $modelId): bool;
+    public function getModelInstance(string $morphableType, int $morphableId): Model;
+
+    public function assign(string $morphableType, int $morphableId, User $user): bool;
+
+    public function dispatch(string $email, Model $model): void;
 }

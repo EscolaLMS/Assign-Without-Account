@@ -2,15 +2,16 @@
 
 namespace EscolaLms\AssignWithoutAccount\Http\Requests;
 
-use EscolaLms\AssignWithoutAccount\Models\UserSubmission;
-use Illuminate\Foundation\Http\FormRequest;
+use EscolaLms\AssignWithoutAccount\Enums\UserSubmissionStatusEnum;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Validation\Rule;
 
-class UserSubmissionCreateRequest extends FormRequest
+class UserSubmissionUpdateRequest extends UserSubmissionRequest
 {
     public function authorize(): bool
     {
-        return Gate::allows('create', UserSubmission::class);
+        $userSubmission = $this->getUserSubmission();
+        return Gate::allows('update', $userSubmission);
     }
 
     public function rules(): array
@@ -19,6 +20,7 @@ class UserSubmissionCreateRequest extends FormRequest
             'email' => ['required', 'email:rfc,dns', 'string'],
             'morphable_type' => ['required', 'string'],
             'morphable_id' => ['required', 'numeric'],
+            'status' => ['string', Rule::in(UserSubmissionStatusEnum::getValues())],
         ];
     }
 }
