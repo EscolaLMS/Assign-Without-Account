@@ -12,5 +12,9 @@ interface UserSubmissionServiceContract
 {
     public function create(UserSubmissionDto $dto): UserSubmission;
 
+    public function update(UserSubmissionDto $dto, int $id): UserSubmission;
+
+    public function delete(int $id): bool;
+
     public function searchAndPaginate(UserSubmissionSearchDto $searchDto, ?PaginationDto $paginationDto): LengthAwarePaginator;
 }

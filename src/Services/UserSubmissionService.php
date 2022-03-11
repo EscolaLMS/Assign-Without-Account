@@ -36,6 +36,16 @@ class UserSubmissionService implements UserSubmissionServiceContract
         return $submission;
     }
 
+    public function update(UserSubmissionDto $dto, int $id): UserSubmission
+    {
+        return $this->userSubmissionRepository->update($dto->toArray(), $id);
+    }
+
+    public function delete(int $id): bool
+    {
+        return $this->userSubmissionRepository->delete($id);
+    }
+
     public function searchAndPaginate(UserSubmissionSearchDto $searchDto, ?PaginationDto $paginationDto): LengthAwarePaginator
     {
         return $this->userSubmissionRepository->searchAndPaginateByCriteria($searchDto, $paginationDto);

@@ -233,6 +233,145 @@ class UserSubmissionAdminTest extends TestCase
             ->assertUnauthorized();
     }
 
+    public function updateUserSubmissionDataProvider(): array
+    {
+        return [
+            [fn() => [Product::class, AssignToProduct::class]],
+            [function() {
+                Shop::registerProductableClass(ExampleProductable::class);
+                return [ExampleProductable::class, AssignToProductable::class];
+            }],
+        ];
+    }
+
+    /**
+     * @dataProvider updateUserSubmissionDataProvider
+     */
+    public function testUpdateUserSubmission($data): void
+    {
+        Event::fake();
+
+        [$class, $event] = $data();
+
+        $model = $class::factory()->create();
+        $userSubmission = UserSubmission::factory()->create();
+        $admin = $this->makeAdmin();
+        $email = 'test@test.pl';
+
+        $response = $this->actingAs($admin, 'api')
+            ->json('PUT', '/api/admin/user-submissions/' . $userSubmission->getKey(), [
+                'email' => $email,
+                'morphable_id' => $model->getKey(),
+                'morphable_type' => $class,
+                'status' => UserSubmissionStatusEnum::REJECTED
+            ])
+            ->assertOk();
+
+        $response->assertJsonFragment([
+            'email' => $email,
+            'morphable_id' =>$model->getKey(),
+            'morphable_type' => $class,
+            'status' => UserSubmissionStatusEnum::REJECTED,
+        ]);
+
+        Event::assertNotDispatched($event);
+    }
+
+    /**
+     * @dataProvider updateUserSubmissionDataProvider
+     */
+    public function testUpdateNotExistingUserSubmission($data): void
+    {
+        Event::fake();
+
+        [$class, $event] = $data();
+
+        $model = $class::factory()->create();
+        $admin = $this->makeAdmin();
+        $this->actingAs($admin, 'api')
+            ->json('PUT', '/api/admin/user-submissions/1', [
+                'email' => 'test@test.pl',
+                'morphable_id' => $model->getKey(),
+                'morphable_type' => $class,
+                'status' => UserSubmissionStatusEnum::REJECTED
+            ])
+            ->assertNotFound();
+
+        Event::assertNotDispatched($event);
+    }
+
+    /**
+     * @dataProvider updateUserSubmissionDataProvider
+     */
+    public function testUpdateUserSubmissionInvalidData($data): void
+    {
+        Event::fake();
+
+        [$class, $event] = $data();
+
+        $userSubmission = UserSubmission::factory()->create();
+        $admin = $this->makeAdmin();
+
+        $this->actingAs($admin, 'api')
+            ->json('PUT', '/api/admin/user-submissions/' . $userSubmission->getKey(), [])
+            ->assertUnprocessable();
+
+        Event::assertNotDispatched($event);
+    }
+
+    public function testUpdateUserSubmissionUnauthorized(): void
+    {
+        Event::fake();
+
+        $userSubmission = UserSubmission::factory()->create();
+        $this->json('PUT', '/api/admin/user-submissions/' . $userSubmission->getKey(), [])
+            ->assertUnauthorized();
+    }
+
+    public function testUpdateUserSubmissionStudentUser(): void
+    {
+        Event::fake();
+
+        $user = $this->makeStudent();
+        $userSubmission = UserSubmission::factory()->create();
+        $this->actingAs($user, 'api')
+            ->json('PUT', '/api/admin/user-submissions/' . $userSubmission->getKey(), [])
+            ->assertForbidden();
+    }
+
+    public function testDeleteUserSubmission(): void
+    {
+        $admin = $this->makeAdmin();
+        $userSubmission = UserSubmission::factory()->create();
+        $this->actingAs($admin, 'api')
+            ->json('DELETE', '/api/admin/user-submissions/' . $userSubmission->getKey())
+            ->assertOk();
+    }
+
+    public function testDeleteNotExistingUserSubmission(): void
+    {
+        $admin = $this->makeAdmin();
+        $this->actingAs($admin, 'api')
+            ->json('DELETE', '/api/admin/user-submissions/1')
+            ->assertNotFound();
+    }
+
+    public function testDeleteUserSubmissionUnauthorizedUser(): void
+    {
+        $this->json('DELETE', '/api/admin/user-submissions/1')
+            ->assertUnauthorized();
+    }
+
+    public function testDeleteUserSubmissionStudentUser(): void
+    {
+        $student = $this->makeStudent();
+        $userSubmission = UserSubmission::factory()->create();
+
+        $this->actingAs($student, 'api')
+            ->json('DELETE', '/api/admin/user-submissions/' . $userSubmission->getKey())
+            ->assertForbidden();
+    }
+
     private function assertApiIndexResponse(TestResponse $response, int $count): void
     {
         $response->assertJsonCount($count, 'data');

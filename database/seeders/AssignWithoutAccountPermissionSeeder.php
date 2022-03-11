@@ -22,6 +22,8 @@ class AssignWithoutAccountPermissionSeeder extends Seeder
         $admin->givePermissionTo([
             AssignWithoutAccountPermissionEnum::USER_SUBMISSION_LIST,
             AssignWithoutAccountPermissionEnum::USER_SUBMISSION_CREATE,
+            AssignWithoutAccountPermissionEnum::USER_SUBMISSION_UPDATE,
+            AssignWithoutAccountPermissionEnum::USER_SUBMISSION_DELETE,
         ]);
     }
 }
