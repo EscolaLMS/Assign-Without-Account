@@ -15,7 +15,7 @@ class AccountRegisteredListener
     private UserSubmissionRepositoryContract $userSubmissionRepository;
 
     public function __construct(
-        UserSubmissionRepositoryContract $userSubmissionRepository,
+        UserSubmissionRepositoryContract $userSubmissionRepository
     )
     {
         $this->userSubmissionRepository = $userSubmissionRepository;
