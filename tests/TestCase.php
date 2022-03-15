@@ -7,6 +7,7 @@ use EscolaLms\AssignWithoutAccount\EscolaLmsAssignWithoutAccountServiceProvider;
 use EscolaLms\Cart\EscolaLmsCartServiceProvider;
 use EscolaLms\Cart\Tests\Mocks\ExampleProductableMigration;
 use EscolaLms\Auth\Models\User;
+use EscolaLms\Templates\EscolaLmsTemplatesServiceProvider;
 use Laravel\Passport\PassportServiceProvider;
 use Spatie\Permission\PermissionServiceProvider;
 
@@ -20,6 +21,7 @@ class TestCase extends \EscolaLms\Core\Tests\TestCase
             PermissionServiceProvider::class,
             EscolaLmsAuthServiceProvider::class,
             EscolaLmsCartServiceProvider::class,
+            EscolaLmsTemplatesServiceProvider::class,
             EscolaLmsAssignWithoutAccountServiceProvider::class
         ];
     }
