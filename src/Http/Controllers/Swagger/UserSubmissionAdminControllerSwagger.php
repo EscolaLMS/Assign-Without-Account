@@ -36,6 +36,24 @@ interface UserSubmissionAdminControllerSwagger
      *             type="string"
      *         )
      *     ),
+     *     @OA\Parameter(
+     *         description="Morphable type",
+     *         in="query",
+     *         name="morphable_type",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         description="Morphable id",
+     *         in="query",
+     *         name="morphable_id",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
      *     @OA\Response(
      *         response=200,
      *         description="List of available user submissions",
