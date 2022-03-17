@@ -8,7 +8,7 @@ use EscolaLms\Cart\Models\Product;
 
 class StrategyContext
 {
-    private AssignStrategy $assignStrategy;
+    private ?AssignStrategy $assignStrategy;
 
     public function __construct(string $type)
     {
