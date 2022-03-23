@@ -140,7 +140,9 @@ jobs:
         run: vendor/bin/testbench config:clear
 
       - name: Create Database
-        run: mkdir -p sqlite touch sqlite/database.sqlite
+        run: |
+          mkdir -p sqlite
+          touch sqlite/database.sqlite
 
       - name: Publish things
         run: vendor/bin/testbench migrate:fresh
