@@ -1,0 +1,234 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "EscolaLMS",
+        "version": "0.0.1"
+    },
+    "paths": {
+        "/api/admin/user-submissions": {
+            "get": {
+                "tags": [
+                    "Assign Without Account"
+                ],
+                "summary": "Lists available user submissions",
+                "operationId": "0bb20b9fcce3a66a1273f75cc8c02aff",
+                "parameters": [
+                    {
+                        "name": "email",
+                        "in": "query",
+                        "description": "User email",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "User submission status",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "morphable_type",
+                        "in": "query",
+                        "description": "Morphable type",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "morphable_id",
+                        "in": "query",
+                        "description": "Morphable id",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of available user submissions"
+                    },
+                    "401": {
+                        "description": "Endpoint requires authentication"
+                    },
+                    "403": {
+                        "description": "User doesn't have required access rights"
+                    },
+                    "500": {
+                        "description": "Server-side error"
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Assign Without Account"
+                ],
+                "summary": "Create a new user submission identified by id",
+                "operationId": "52c0c9f48f6098df0b0c4a569429560a",
+                "requestBody": {
+                    "description": "User submission attributes",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UserSubmission"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "User submission created successfully"
+                    },
+                    "401": {
+                        "description": "Endpoint requires authentication"
+                    },
+                    "403": {
+                        "description": "User doesn't have required access rights"
+                    },
+                    "422": {
+                        "description": "One of the parameters has invalid format"
+                    },
+                    "500": {
+                        "description": "Server-side error"
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
+            }
+        },
+        "/api/admin/user-submissions/{id}": {
+            "put": {
+                "tags": [
+                    "Assign Without Account"
+                ],
+                "summary": "Update an existing user submission identified by id",
+                "operationId": "a87f3e11e8ef0c676b2b92d09a28ea96",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Unique human-readable user submission identifier",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "User submission attributes",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UserSubmission"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "User submission created successfully"
+                    },
+                    "401": {
+                        "description": "Endpoint requires authentication"
+                    },
+                    "403": {
+                        "description": "User doesn't have required access rights"
+                    },
+                    "422": {
+                        "description": "One of the parameters has invalid format"
+                    },
+                    "500": {
+                        "description": "Server-side error"
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Assign Without Account"
+                ],
+                "summary": "Delete user submission identified by a id",
+                "operationId": "f9969ee33d77c41bd3b115097070bc2a",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Unique human-readable access url identifier",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User submission eleted successfully"
+                    },
+                    "401": {
+                        "description": "Endpoint requires authentication"
+                    },
+                    "403": {
+                        "description": "User doesn't have required access rights"
+                    },
+                    "500": {
+                        "description": "Server-side error"
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "UserSubmission": {
+                "properties": {
+                    "id": {
+                        "description": "user submission id",
+                        "type": "integer"
+                    },
+                    "email": {
+                        "description": "user email",
+                        "type": "string"
+                    },
+                    "status": {
+                        "description": "status",
+                        "type": "string"
+                    },
+                    "morphable_id": {
+                        "description": "morph id",
+                        "type": "integer"
+                    },
+                    "morphable_type": {
+                        "description": "morph type",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            }
+        }
+    }
+}
