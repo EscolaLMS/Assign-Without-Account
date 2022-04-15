@@ -27,16 +27,16 @@ You need to define email templates in the `Templates` package for `AssignToProdu
 
 ## Example
 1. Create user submission like this:
-    ```http request
-    POST /api/admin/user-submissions
-    ```
-    ```json
-    {
-        "email": "test@email.com",
-        "morphable_id": 2,
-        "morphable_type": "EscolaLms\\Cart\\Models\\Product"
-    }
-    ```
+```http request
+POST /api/admin/user-submissions
+```
+```json
+{
+    "email": "test@email.com",
+    "morphable_id": 2,
+    "morphable_type": "EscolaLms\\Cart\\Models\\Product"
+}
+```
 2. Create a new account.
 3. The product is assigned to your account.
 
