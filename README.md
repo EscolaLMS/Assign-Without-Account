@@ -48,7 +48,9 @@ All the endpoints are defined in swagger
 ## Tests
 Run `./vendor/bin/phpunit` to run tests. See [tests](tests) folder as it's quite good staring point as documentation appendix.
 
-Test details [![codecov](https://codecov.io/gh/EscolaLMS/model-fields/branch/main/graph/badge.svg?token=NRAN4R8AGZ)](https://codecov.io/gh/EscolaLMS/model-fields) [![phpunit](https://github.com/EscolaLMS/model-fields/actions/workflows/test.yml/badge.svg)](https://github.com/EscolaLMS/model-fields/actions/workflows/test.yml)
+Test details 
+[![codecov](https://codecov.io/gh/EscolaLMS/Assign-Without-Account/branch/main/graph/badge.svg?token=O91FHNKI6R)](https://codecov.io/gh/EscolaLMS/Assign-Without-Account)
+![Tests PHPUnit in environments](https://github.com/EscolaLMS/Assign-Without-Account/actions/workflows/test.yml/badge.svg)
 
 ## Events
 1. `AssignToProduct` - event dispatched after assigning user to product.
