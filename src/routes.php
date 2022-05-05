@@ -1,7 +1,7 @@
 <?php
 
 use EscolaLms\AssignWithoutAccount\Http\Controllers\UserSubmissionAdminController;
-use Illuminate\Routing\Route;
+use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'api'], function () {
     Route::group(['prefix' => 'admin/user-submissions', 'middleware' => ['auth:api']], function () {
