@@ -24,6 +24,7 @@ class EscolaLmsAssignWithoutAccountServiceProvider extends ServiceProvider
     public function register()
     {
         $this->mergeConfigFrom(__DIR__ . '/config.php', self::CONFIG_KEY);
+        $this->loadTranslationsFrom(__DIR__ . '/../resources/lang', 'assign-without-account');
 
         $this->app->register(AuthServiceProvider::class);
         $this->app->register(EventServiceProvider::class);
