@@ -42,5 +42,9 @@
     "sort-packages": true
   },
   "minimum-stability": "dev",
-  "prefer-stable": true
+  "prefer-stable": true,
+  "allow-plugins": {
+    "composer/package-versions-deprecated": true,
+    "php-http/discovery": true
+  }
 }
