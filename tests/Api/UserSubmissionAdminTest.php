@@ -6,6 +6,7 @@ use EscolaLms\AssignWithoutAccount\Database\Seeders\AssignWithoutAccountPermissi
 use EscolaLms\AssignWithoutAccount\Enums\UserSubmissionStatusEnum;
 use EscolaLms\AssignWithoutAccount\Events\AssignToProduct;
 use EscolaLms\AssignWithoutAccount\Events\AssignToProductable;
+use EscolaLms\AssignWithoutAccount\Events\UnassignProduct;
 use EscolaLms\AssignWithoutAccount\Events\UnassignProductable;
 use EscolaLms\AssignWithoutAccount\Models\UserSubmission;
 use EscolaLms\AssignWithoutAccount\Tests\TestCase;
@@ -353,9 +354,9 @@ class UserSubmissionAdminTest extends TestCase
     {
         Event::fake();
         $admin = $this->makeAdmin();
-        $product = ExampleProductable::factory()->create();
+        $productable = ExampleProductable::factory()->create();
         $userSubmission = UserSubmission::factory()->create([
-            'morphable_id' => $product->getKey(),
+            'morphable_id' => $productable->getKey(),
             'morphable_type' => ExampleProductable::class
         ]);
 
@@ -364,6 +365,18 @@ class UserSubmissionAdminTest extends TestCase
             ->assertOk();
 
         Event::assertDispatched(UnassignProductable::class);
+
+        $product = Product::factory()->create();
+        $userSubmission = UserSubmission::factory()->create([
+            'morphable_id' => $product->getKey(),
+            'morphable_type' => Product::class
+        ]);
+
+        $this->actingAs($admin, 'api')
+            ->json('DELETE', '/api/admin/user-submissions/' . $userSubmission->getKey())
+            ->assertOk();
+
+        Event::assertDispatched(UnassignProduct::class);
     }
 
     public function testDeleteNotExistingUserSubmission(): void
