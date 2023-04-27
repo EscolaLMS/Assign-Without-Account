@@ -6,6 +6,7 @@ use EscolaLms\AssignWithoutAccount\Database\Seeders\AssignWithoutAccountPermissi
 use EscolaLms\AssignWithoutAccount\Enums\UserSubmissionStatusEnum;
 use EscolaLms\AssignWithoutAccount\Events\AssignToProduct;
 use EscolaLms\AssignWithoutAccount\Events\AssignToProductable;
+use EscolaLms\AssignWithoutAccount\Events\UnassignProductable;
 use EscolaLms\AssignWithoutAccount\Models\UserSubmission;
 use EscolaLms\AssignWithoutAccount\Tests\TestCase;
 use EscolaLms\Cart\Facades\Shop;
@@ -237,7 +238,7 @@ class UserSubmissionAdminTest extends TestCase
     {
         return [
             [fn() => [Product::class, AssignToProduct::class]],
-            [function() {
+            [function () {
                 Shop::registerProductableClass(ExampleProductable::class);
                 return [ExampleProductable::class, AssignToProductable::class];
             }],
@@ -269,7 +270,7 @@ class UserSubmissionAdminTest extends TestCase
 
         $response->assertJsonFragment([
             'email' => $email,
-            'morphable_id' =>$model->getKey(),
+            'morphable_id' => $model->getKey(),
             'morphable_type' => $class,
             'status' => UserSubmissionStatusEnum::REJECTED,
         ]);
@@ -346,6 +347,23 @@ class UserSubmissionAdminTest extends TestCase
         $this->actingAs($admin, 'api')
             ->json('DELETE', '/api/admin/user-submissions/' . $userSubmission->getKey())
             ->assertOk();
+    }
+
+    public function testDeleteUserSubmissionWithEvent(): void
+    {
+        Event::fake();
+        $admin = $this->makeAdmin();
+        $product = ExampleProductable::factory()->create();
+        $userSubmission = UserSubmission::factory()->create([
+            'morphable_id' => $product->getKey(),
+            'morphable_type' => ExampleProductable::class
+        ]);
+
+        $this->actingAs($admin, 'api')
+            ->json('DELETE', '/api/admin/user-submissions/' . $userSubmission->getKey())
+            ->assertOk();
+
+        Event::assertDispatched(UnassignProductable::class);
     }
 
     public function testDeleteNotExistingUserSubmission(): void
