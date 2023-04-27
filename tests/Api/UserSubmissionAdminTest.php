@@ -356,6 +356,7 @@ class UserSubmissionAdminTest extends TestCase
         $admin = $this->makeAdmin();
         $productable = ExampleProductable::factory()->create();
         $userSubmission = UserSubmission::factory()->create([
+            'email' => 'test@example.com',
             'morphable_id' => $productable->getKey(),
             'morphable_type' => ExampleProductable::class
         ]);
@@ -364,7 +365,11 @@ class UserSubmissionAdminTest extends TestCase
             ->json('DELETE', '/api/admin/user-submissions/' . $userSubmission->getKey())
             ->assertOk();
 
-        Event::assertDispatched(UnassignProductable::class);
+        Event::assertDispatched(
+            UnassignProductable::class,
+            fn(UnassignProductable $event) => $event->getProductable()->getKey() === $productable->getKey()
+                && $event->getUser()->email = 'test@example.com'
+        );
 
         $product = Product::factory()->create();
         $userSubmission = UserSubmission::factory()->create([
@@ -376,7 +381,11 @@ class UserSubmissionAdminTest extends TestCase
             ->json('DELETE', '/api/admin/user-submissions/' . $userSubmission->getKey())
             ->assertOk();
 
-        Event::assertDispatched(UnassignProduct::class);
+        Event::assertDispatched(
+            UnassignProduct::class,
+            fn(UnassignProduct $event) => $event->getProduct()->getKey() === $product->getKey()
+                && $event->getUser()->email = 'test@example.com'
+        );
     }
 
     public function testDeleteNotExistingUserSubmission(): void
