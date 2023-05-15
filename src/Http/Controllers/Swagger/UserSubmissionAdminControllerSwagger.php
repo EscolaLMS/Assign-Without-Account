@@ -54,6 +54,24 @@ interface UserSubmissionAdminControllerSwagger
      *             type="string"
      *         )
      *     ),
+     *     @OA\Parameter(
+     *         description="Order column",
+     *         in="query",
+     *         name="order_by",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         description="Order direction",
+     *         in="query",
+     *         name="order",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
      *     @OA\Response(
      *         response=200,
      *         description="List of available user submissions",

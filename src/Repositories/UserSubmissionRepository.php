@@ -4,6 +4,7 @@ namespace EscolaLms\AssignWithoutAccount\Repositories;
 
 use EscolaLms\AssignWithoutAccount\Dto\UserSubmissionSearchDto;
 use EscolaLms\AssignWithoutAccount\Models\UserSubmission;
+use EscolaLms\Core\Dtos\OrderDto;
 use EscolaLms\Core\Dtos\PaginationDto;
 use EscolaLms\Core\Repositories\BaseRepository;
 use EscolaLms\AssignWithoutAccount\Repositories\Contracts\UserSubmissionRepositoryContract;
@@ -23,12 +24,13 @@ class UserSubmissionRepository extends BaseRepository implements UserSubmissionR
         return UserSubmission::class;
     }
 
-    public function searchAndPaginateByCriteria(UserSubmissionSearchDto $searchDto, ?PaginationDto $paginationDto = null): LengthAwarePaginator
+    public function searchAndPaginateByCriteria(UserSubmissionSearchDto $searchDto, ?PaginationDto $paginationDto = null, ?OrderDto $orderDto = null): LengthAwarePaginator
     {
         $criteria = $this->makeCriteria($searchDto);
 
         $query = $this->model->newQuery();
         $query = $this->applyCriteria($query, $criteria);
+        $query->orderBy($orderDto?->getOrderBy() ?? 'id', $orderDto?->getOrder() ?? 'asc');
 
         return $query->paginate($paginationDto->getLimit());
     }
