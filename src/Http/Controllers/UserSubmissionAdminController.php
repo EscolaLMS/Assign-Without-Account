@@ -11,6 +11,7 @@ use EscolaLms\AssignWithoutAccount\Http\Requests\UserSubmissionListRequest;
 use EscolaLms\AssignWithoutAccount\Http\Requests\UserSubmissionUpdateRequest;
 use EscolaLms\AssignWithoutAccount\Http\Resources\UserSubmissionResource;
 use EscolaLms\AssignWithoutAccount\Services\Contracts\UserSubmissionServiceContract;
+use EscolaLms\Core\Dtos\OrderDto;
 use EscolaLms\Core\Dtos\PaginationDto;
 use EscolaLms\Core\Http\Controllers\EscolaLmsBaseController;
 use Illuminate\Http\JsonResponse;
@@ -29,6 +30,7 @@ class UserSubmissionAdminController extends EscolaLmsBaseController implements U
         $result = $this->userSubmissionService->searchAndPaginate(
             UserSubmissionSearchDto::instantiateFromRequest($request),
             PaginationDto::instantiateFromRequest($request),
+            OrderDto::instantiateFromRequest($request),
         );
 
         return $this->sendResponseForResource(

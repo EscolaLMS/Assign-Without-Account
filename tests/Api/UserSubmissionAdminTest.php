@@ -136,6 +136,68 @@ class UserSubmissionAdminTest extends TestCase
         $this->assertDatabaseCount('user_submissions', 15);
     }
 
+    public function testIndexFilterWithOrder(): void
+    {
+        $admin = $this->makeAdmin();
+
+        $submission1 = UserSubmission::factory()->create([
+            'status' => UserSubmissionStatusEnum::ACCEPTED,
+            'email' => 'aexample@example.com',
+        ]);
+        $submission2 = UserSubmission::factory()->create([
+            'status' => UserSubmissionStatusEnum::SENT,
+            'email' => 'bexample@example.com',
+        ]);
+
+        $response = $this->actingAs($admin, 'api')
+            ->json('GET', '/api/admin/user-submissions',  [
+                'order_by' => 'id',
+                'order' => 'DESC',
+            ]);
+
+        $this->assertTrue($response->json('data')[0]['id'] === $submission2->getKey());
+
+        $response = $this->actingAs($admin, 'api')
+            ->json('GET', '/api/admin/user-submissions',  [
+                'order_by' => 'id',
+                'order' => 'ASC',
+            ]);
+
+        $this->assertTrue($response->json('data')[0]['id'] === $submission1->getKey());
+
+        $response = $this->actingAs($admin, 'api')
+            ->json('GET', '/api/admin/user-submissions',  [
+                'order_by' => 'email',
+                'order' => 'DESC',
+            ]);
+
+        $this->assertTrue($response->json('data')[0]['id'] === $submission2->getKey());
+
+        $response = $this->actingAs($admin, 'api')
+            ->json('GET', '/api/admin/user-submissions',  [
+                'order_by' => 'email',
+                'order' => 'ASC',
+            ]);
+
+        $this->assertTrue($response->json('data')[0]['id'] === $submission1->getKey());
+
+        $response = $this->actingAs($admin, 'api')
+            ->json('GET', '/api/admin/user-submissions',  [
+                'order_by' => 'status',
+                'order' => 'DESC',
+            ]);
+
+        $this->assertTrue($response->json('data')[0]['id'] === $submission2->getKey());
+
+        $response = $this->actingAs($admin, 'api')
+            ->json('GET', '/api/admin/user-submissions',  [
+                'order_by' => 'status',
+                'order' => 'ASC',
+            ]);
+
+        $this->assertTrue($response->json('data')[0]['id'] === $submission1->getKey());
+    }
+
     public function testCreateUserSubmissionToProduct()
     {
         Event::fake();

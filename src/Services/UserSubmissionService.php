@@ -14,6 +14,7 @@ use EscolaLms\AssignWithoutAccount\Strategies\Contracts\AssignStrategy;
 use EscolaLms\AssignWithoutAccount\Strategies\StrategyContext;
 use EscolaLms\Cart\Contracts\Productable;
 use EscolaLms\Cart\Models\Product;
+use EscolaLms\Core\Dtos\OrderDto;
 use EscolaLms\Core\Dtos\PaginationDto;
 use EscolaLms\Core\Models\User;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -55,9 +56,9 @@ class UserSubmissionService implements UserSubmissionServiceContract
         return $this->userSubmissionRepository->delete($id);
     }
 
-    public function searchAndPaginate(UserSubmissionSearchDto $searchDto, ?PaginationDto $paginationDto): LengthAwarePaginator
+    public function searchAndPaginate(UserSubmissionSearchDto $searchDto, ?PaginationDto $paginationDto, ?OrderDto $orderDto = null): LengthAwarePaginator
     {
-        return $this->userSubmissionRepository->searchAndPaginateByCriteria($searchDto, $paginationDto);
+        return $this->userSubmissionRepository->searchAndPaginateByCriteria($searchDto, $paginationDto, $orderDto);
     }
 
     private function getStrategy(string $morphType): ?AssignStrategy
