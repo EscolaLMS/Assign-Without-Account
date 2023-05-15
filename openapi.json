@@ -48,6 +48,24 @@
                         "schema": {
                             "type": "string"
                         }
+                    },
+                    {
+                        "name": "order_by",
+                        "in": "query",
+                        "description": "Order column",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "order",
+                        "in": "query",
+                        "description": "Order direction",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 ],
                 "responses": {
