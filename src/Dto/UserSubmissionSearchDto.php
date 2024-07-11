@@ -33,7 +33,7 @@ class UserSubmissionSearchDto implements DtoContract, InstantiateFromRequest
 
     public static function instantiateFromRequest(Request $request): self
     {
-        return new static(
+        return new self(
             $request->input('email'),
             $request->input('morphable_id'),
             $request->input('morphable_type'),

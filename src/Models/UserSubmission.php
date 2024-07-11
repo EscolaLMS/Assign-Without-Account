@@ -36,6 +36,9 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  *          type="string"
  *      ),
  * )
+ *
+ * @property string $email
+ * @property string $morphable_type
  */
 class UserSubmission extends Model
 {

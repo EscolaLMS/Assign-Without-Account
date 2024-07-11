@@ -4,6 +4,7 @@ namespace EscolaLms\AssignWithoutAccount\Strategies;
 
 use EscolaLms\AssignWithoutAccount\Events\AssignToProductable;
 use EscolaLms\AssignWithoutAccount\Strategies\Contracts\AssignStrategy;
+use EscolaLms\Cart\Contracts\Productable;
 use EscolaLms\Cart\Services\Contracts\ProductServiceContract;
 use EscolaLms\Core\Models\User;
 use Illuminate\Database\Eloquent\Model;
@@ -20,6 +21,7 @@ class AssignProductableStrategy extends AbstractAssignStrategy implements Assign
 
     public function assign(string $morphableType, int $morphableId, User $user): bool
     {
+        /** @var Productable $model */
         $model = $this->getModelInstance($morphableType, $morphableId);
 
         $this->productService->attachProductableToUser($model, $user);
@@ -30,7 +32,9 @@ class AssignProductableStrategy extends AbstractAssignStrategy implements Assign
     public function dispatch(string $email, Model $model): void
     {
         $user = $this->createUser($email);
-        AssignToProductable::dispatch($user, $model);
+        if ($model instanceof Productable) {
+            AssignToProductable::dispatch($user, $model);
+        }
     }
 
     public function getModelInstance(string $namespace, int $id): Model

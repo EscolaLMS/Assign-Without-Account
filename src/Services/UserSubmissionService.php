@@ -35,6 +35,7 @@ class UserSubmissionService implements UserSubmissionServiceContract
         $model = $strategy->getModelInstance($dto->getMorphableType(), $dto->getMorphableId());
 
         $dto->setStatus(UserSubmissionStatusEnum::SENT);
+        /** @var UserSubmission $submission */
         $submission =  $this->userSubmissionRepository->create($dto->toArray());
 
         $strategy->dispatch($dto->getEmail(), $model);
@@ -44,7 +45,9 @@ class UserSubmissionService implements UserSubmissionServiceContract
 
     public function update(UserSubmissionDto $dto, int $id): UserSubmission
     {
-        return $this->userSubmissionRepository->update($dto->toArray(), $id);
+        /** @var UserSubmission $submission */
+        $submission = $this->userSubmissionRepository->update($dto->toArray(), $id);
+        return $submission;
     }
 
     public function delete(int $id): bool
@@ -56,6 +59,12 @@ class UserSubmissionService implements UserSubmissionServiceContract
         return $this->userSubmissionRepository->delete($id);
     }
 
+    /**
+     * @param UserSubmissionSearchDto $searchDto
+     * @param PaginationDto|null $paginationDto
+     * @param OrderDto|null $orderDto
+     * @return LengthAwarePaginator<UserSubmission>
+     */
     public function searchAndPaginate(UserSubmissionSearchDto $searchDto, ?PaginationDto $paginationDto, ?OrderDto $orderDto = null): LengthAwarePaginator
     {
         return $this->userSubmissionRepository->searchAndPaginateByCriteria($searchDto, $paginationDto, $orderDto);

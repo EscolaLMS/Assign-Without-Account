@@ -13,6 +13,9 @@ class UserSubmissionCreateRequest extends FormRequest
         return Gate::allows('create', UserSubmission::class);
     }
 
+    /**
+     * @return array<string, array<int, mixed>>
+     */
     public function rules(): array
     {
         return [
