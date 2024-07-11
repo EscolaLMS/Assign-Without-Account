@@ -21,7 +21,7 @@ class AccountRegisteredListener
         $this->userSubmissionRepository = $userSubmissionRepository;
     }
 
-    public function handle(AccountRegistered $event)
+    public function handle(AccountRegistered $event): void
     {
         $user = new User($event->user->toArray());
         $user->id = $event->user->getKey();

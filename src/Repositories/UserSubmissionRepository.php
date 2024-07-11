@@ -8,12 +8,16 @@ use EscolaLms\Core\Dtos\OrderDto;
 use EscolaLms\Core\Dtos\PaginationDto;
 use EscolaLms\Core\Repositories\BaseRepository;
 use EscolaLms\AssignWithoutAccount\Repositories\Contracts\UserSubmissionRepositoryContract;
+use EscolaLms\Core\Repositories\Criteria\Criterion;
 use EscolaLms\Core\Repositories\Criteria\Primitives\EqualCriterion;
 use EscolaLms\Core\Repositories\Criteria\Primitives\LikeCriterion;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class UserSubmissionRepository extends BaseRepository implements UserSubmissionRepositoryContract
 {
+    /**
+     * @return array<string>
+     */
     public function getFieldsSearchable(): array
     {
         return [];
@@ -35,6 +39,10 @@ class UserSubmissionRepository extends BaseRepository implements UserSubmissionR
         return $query->paginate($paginationDto->getLimit());
     }
 
+    /**
+     * @param UserSubmissionSearchDto $searchDto
+     * @return array<int, Criterion>
+     */
     private function makeCriteria(UserSubmissionSearchDto $searchDto): array
     {
         $criteria = [];

@@ -10,9 +10,10 @@
   },
   "require-dev": {
     "phpunit/phpunit": "^9.0",
-    "orchestra/testbench": "^6",
+    "orchestra/testbench": ">=6",
     "escolalms/auth": "^0",
-    "escolalms/templates": "^0"
+    "escolalms/templates": "^0",
+    "nunomaduro/larastan": "^2.0"
   },
   "license": "MIT",
   "authors": [

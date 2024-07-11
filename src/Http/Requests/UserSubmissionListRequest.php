@@ -13,6 +13,9 @@ class UserSubmissionListRequest extends FormRequest
         return Gate::allows('list', UserSubmission::class);
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function rules(): array
     {
         return [];

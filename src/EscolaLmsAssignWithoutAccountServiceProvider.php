@@ -16,6 +16,9 @@ class EscolaLmsAssignWithoutAccountServiceProvider extends ServiceProvider
 {
     const CONFIG_KEY = 'escolalms_assign_without_account';
 
+    /**
+     * @var array<class-string, class-string>
+     */
     public $singletons = [
         UserSubmissionRepositoryContract::class => UserSubmissionRepository::class,
         UserSubmissionServiceContract::class => UserSubmissionService::class
@@ -30,7 +33,7 @@ class EscolaLmsAssignWithoutAccountServiceProvider extends ServiceProvider
         $this->app->register(EventServiceProvider::class);
     }
 
-    public function boot()
+    public function boot(): void
     {
         $this->loadRoutesFrom(__DIR__ . '/routes.php');
 
@@ -39,7 +42,7 @@ class EscolaLmsAssignWithoutAccountServiceProvider extends ServiceProvider
         }
     }
 
-    public function bootForConsole()
+    public function bootForConsole(): void
     {
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
 

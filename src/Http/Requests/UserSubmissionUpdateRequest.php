@@ -14,6 +14,9 @@ class UserSubmissionUpdateRequest extends UserSubmissionRequest
         return Gate::allows('update', $userSubmission);
     }
 
+    /**
+     * @return array<string, array<int, mixed>>
+     */
     public function rules(): array
     {
         return [

@@ -12,6 +12,9 @@ class UserSubmissionDeleteRequest extends UserSubmissionRequest
         return Gate::allows('delete', $userSubmission);
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function rules(): array
     {
         return [];

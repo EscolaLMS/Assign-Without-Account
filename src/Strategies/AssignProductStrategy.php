@@ -4,6 +4,7 @@ namespace EscolaLms\AssignWithoutAccount\Strategies;
 
 use EscolaLms\AssignWithoutAccount\Events\AssignToProduct;
 use EscolaLms\AssignWithoutAccount\Strategies\Contracts\AssignStrategy;
+use EscolaLms\Cart\Models\Product;
 use EscolaLms\Cart\Services\Contracts\ProductServiceContract;
 use Illuminate\Database\Eloquent\Model;
 use EscolaLms\Core\Models\User;
@@ -21,7 +22,7 @@ class AssignProductStrategy extends AbstractAssignStrategy implements AssignStra
     {
         $model = $this->getModelInstance($morphableType, $morphableId);
 
-        if (!$model) {
+        if (!($model instanceof Product)) {
             return false;
         }
 
@@ -30,6 +31,11 @@ class AssignProductStrategy extends AbstractAssignStrategy implements AssignStra
         return true;
     }
 
+    /**
+     * @param string $email
+     * @param Product $model
+     * @return void
+     */
     public function dispatch(string $email, Model $model): void
     {
         $user = $this->createUser($email);

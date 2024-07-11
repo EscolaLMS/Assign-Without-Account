@@ -6,15 +6,19 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class UserSubmissionResource extends JsonResource
 {
+    /**
+     * @param $request
+     * @return array<string, mixed>
+     */
     public function toArray($request): array
     {
         return [
-            'id' => $this->id,
-            'email' => $this->email,
-            'status' => $this->status,
-            'morphable_id' => $this->morphable_id,
-            'morphable_type' => $this->morphable_type,
-            'created_at' => $this->created_at
+            'id' => $this->resource->id,
+            'email' => $this->resource->email,
+            'status' => $this->resource->status,
+            'morphable_id' => $this->resource->morphable_id,
+            'morphable_type' => $this->resource->morphable_type,
+            'created_at' => $this->resource->created_at
         ];
     }
 }
